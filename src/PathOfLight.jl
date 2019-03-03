@@ -11,4 +11,7 @@ module PathOfLight
 
   export Canvas, read_pixel, write_pixel
   include("canvas.jl")
+
+  export to_ppm
+  include("ppm.jl")
 end

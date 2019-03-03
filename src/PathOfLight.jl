@@ -8,4 +8,7 @@ module PathOfLight
 
   export Color
   include("color.jl")
+
+  export Canvas, read_pixel, write_pixel
+  include("canvas.jl")
 end

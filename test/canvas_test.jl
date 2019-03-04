@@ -17,9 +17,18 @@
   end
 
   @testset "Writing a pixel" begin
-    c = Canvas(width=10, height=20)
-    red = Color(1, 0, 0)
-    write_pixel(c, x=0, y=0, color=red)
-    @test read_pixel(c, x=0, y=0) == red
+    @testset "with x, y as Int" begin
+      c = Canvas(width=10, height=20)
+      red = Color(1, 0, 0)
+      write_pixel!(c, x=0, y=0, color=red)
+      @test read_pixel(c, x=0, y=0) == red
+    end
+
+    @testset "with x, y as Float" begin
+      c = Canvas(width=10, height=20)
+      red = Color(1, 0, 0)
+      write_pixel!(c, x=0.2, y=0.8, color=red)
+      @test read_pixel(c, x=0, y=1) == red
+    end
   end
 end

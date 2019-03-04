@@ -11,9 +11,9 @@
     c1 = Color(1.5, 0, 0)
     c2 = Color(0, 0.5, 0)
     c3 = Color(-0.5, 0, 1)
-    write_pixel(c, x=0, y=0, color=c1)
-    write_pixel(c, x=2, y=1, color=c2)
-    write_pixel(c, x=4, y=2, color=c3)
+    write_pixel!(c, x=0, y=0, color=c1)
+    write_pixel!(c, x=2, y=1, color=c2)
+    write_pixel!(c, x=4, y=2, color=c3)
     ppm = split(to_ppm(c), "\n")
     @test ppm[4] == "255 0 0 0 0 0 0 0 0 0 0 0 0 0 0"
     @test ppm[5] == "0 0 0 0 0 0 0 128 0 0 0 0 0 0 0"

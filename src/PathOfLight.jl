@@ -9,7 +9,7 @@ module PathOfLight
   export Color
   include("color.jl")
 
-  export Canvas, read_pixel, write_pixel
+  export Canvas, read_pixel, write_pixel!
   include("canvas.jl")
 
   export to_ppm

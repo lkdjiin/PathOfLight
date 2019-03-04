@@ -16,6 +16,6 @@ function read_pixel(c::Canvas; x::Int, y::Int)
 end
 
 # x and y are zero-based, but Julia's arrays are one-based.
-function write_pixel(c::Canvas; x::Int, y::Int, color::Color)
-  c.pixels[y + 1, x + 1] = color
+function write_pixel!(c::Canvas; x::Real, y::Real, color::Color)
+  c.pixels[round(Int, y) + 1, round(Int, x) + 1] = color
 end

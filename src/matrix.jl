@@ -29,3 +29,11 @@ end
 function is_invertible(matrix)
   LinearAlgebra.det(matrix) > 0
 end
+
+function translation(x, y, z)
+  result = copy(identity4)
+  result[1, 4] = x
+  result[2, 4] = y
+  result[3, 4] = z
+  result
+end

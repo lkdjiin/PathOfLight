@@ -90,4 +90,33 @@
           0 0 0 0]
     @test is_invertible(b) == false
   end
+
+  @testset "Translation matrices" begin
+    @testset "translation()" begin
+      expected = [1.0 0.0 0.0 2.0;
+                  0.0 1.0 0.0 3.0;
+                  0.0 0.0 1.0 4.0;
+                  0.0 0.0 0.0 1.0]
+      @test expected == translation(2, 3, 4)
+    end
+
+    @testset "Multiplying by a translation matrix" begin
+      transform = translation(5, -3, 2)
+      p = point(-3, 4, 5)
+      @test transform * p == point(2, 1, 7)
+    end
+
+    @testset "Multiplying by the inverse of a translation matrix" begin
+      transform = translation(5, -3, 2)
+      inversed = inv(transform)
+      p = point(-3, 4, 5)
+      @test inversed * p == point(-8, 7, 3)
+    end
+
+    @testset "Translation does not affect vectors" begin
+      transform = translation(5, -3, 2)
+      v = vector(-3, 4, 5)
+      @test transform * v == v
+    end
+  end
 end

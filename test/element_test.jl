@@ -136,12 +136,12 @@
   end
 
   @testset "normalize()" begin
-    @test normalize(vector(4, 0, 0)) == vector(1, 0, 0)
-    @test normalize(vector(1, 2, 3)) == vector(0.26726, 0.53452, 0.80178)
+    @test PathOfLight.normalize(vector(4, 0, 0)) == vector(1, 0, 0)
+    @test PathOfLight.normalize(vector(1, 2, 3)) == vector(0.26726, 0.53452, 0.80178)
 
     @testset "magnitude of a normalized vector" begin
       v = vector(1, 2, 3)
-      norm = normalize(v)
+      norm = PathOfLight.normalize(v)
       @test magnitude(norm) == 1
     end
   end
@@ -149,13 +149,13 @@
   @testset "dot()" begin
     a = vector(1, 2, 3)
     b = vector(2, 3, 4)
-    @test dot(a, b) == 20
+    @test PathOfLight.dot(a, b) == 20
   end
 
   @testset "cross()" begin
     a = vector(1, 2, 3)
     b = vector(2, 3, 4)
-    @test cross(a, b) == vector(-1, 2, -1)
-    @test cross(b, a) == vector(1, -2, 1)
+    @test PathOfLight.cross(a, b) == vector(-1, 2, -1)
+    @test PathOfLight.cross(b, a) == vector(1, -2, 1)
   end
 end

@@ -1,6 +1,9 @@
 module PathOfLight
 
+  import LinearAlgebra: det
   import Base: ==, !=, +, -, *, /
+
+  using LinearAlgebra
 
   export Element, ispoint, isvector, point, vector, negate, magnitude,
          normalize, dot, cross
@@ -14,4 +17,7 @@ module PathOfLight
 
   export to_ppm
   include("ppm.jl")
+
+  export matrix_compare, identity4, is_invertible
+  include("matrix.jl")
 end

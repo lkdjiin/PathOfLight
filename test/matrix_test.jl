@@ -227,4 +227,13 @@
       @test transform * p == point(2, 3, 7)
     end
   end
+
+  @testset "Chained transformations must be applied in reverse order" begin
+    p = point(1, 0, 1)
+    a = rotation_x(π / 2)
+    b = scaling(5, 5, 5)
+    c = translation(10, 5, 7)
+    t = c * b * a
+    @test t * p == point(15, 0, 7)
+  end
 end

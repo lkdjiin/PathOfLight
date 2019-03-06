@@ -37,3 +37,11 @@ function translation(x, y, z)
   result[3, 4] = z
   result
 end
+
+function scaling(x, y, z)
+  result = copy(identity4)
+  result[1, 1] = x
+  result[2, 2] = y
+  result[3, 3] = z
+  result
+end

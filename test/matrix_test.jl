@@ -119,4 +119,31 @@
       @test transform * v == v
     end
   end
+
+  @testset "Scaling matrices" begin
+    @testset "A scaling matrix applied to a point" begin
+      transform = scaling(2, 3, 4)
+      p = point(-4, 6, 8)
+      @test transform * p == point(-8, 18, 32)
+    end
+
+    @testset "A scaling matrix applied to a vector" begin
+      transform = scaling(2, 3, 4)
+      v = vector(-4, 6, 8)
+      @test transform * v == vector(-8, 18, 32)
+    end
+
+    @testset "Multiplying by the inverse of a scaling matrix" begin
+      transform = scaling(2, 3, 4)
+      inversed = inv(transform)
+      v = vector(-4, 6, 8)
+      @test inversed * v == vector(-2, 2, 2)
+    end
+
+    @testset "Reflection is scaling by a negative value" begin
+      transform = scaling(-1, 1, 1)
+      p = point(2, 3, 4)
+      @test transform * p == point(-2, 3, 4)
+    end
+  end
 end

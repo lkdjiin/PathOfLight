@@ -146,4 +146,47 @@
       @test transform * p == point(-2, 3, 4)
     end
   end
+
+  @testset "Rotation" begin
+    @testset "around the X Axis" begin
+      @testset "by a full quarter" begin
+        p = point(0, 1, 0)
+        full_quarter = rotation_x(π / 2)
+        @test full_quarter * p == point(0, 0, 1)
+      end
+
+      @testset "by half a quarter" begin
+        p = point(0, 1, 0)
+        half_quarter = rotation_x(π / 4)
+        @test half_quarter * p == point(0, √2 / 2, √2 / 2)
+      end
+
+      @testset "The inverse rotates in the opposite direction" begin
+        p = point(0, 1, 0)
+        half_quarter = rotation_x(π / 4)
+        inversed = inv(half_quarter)
+        @test inversed * p == point(0, √2 / 2, -√2 / 2)
+      end
+    end
+
+    @testset "around the Y Axis" begin
+      @testset "rotation_y()" begin
+        p = point(0, 0, 1)
+        half_quarter = rotation_y(π / 4)
+        full_quarter = rotation_y(π / 2)
+        @test half_quarter * p == point(√2/2, 0, √2/2)
+        @test full_quarter * p == point(1, 0, 0)
+      end
+    end
+
+    @testset "around the Z Axis" begin
+      @testset "Rotating a point around the z axis" begin
+        p = point(0, 1, 0)
+        half_quarter = rotation_z(π / 4)
+        full_quarter = rotation_z(π / 2)
+        @test half_quarter * p == point(-√2/2, √2/2, 0)
+        @test full_quarter * p == point(-1, 0, 0)
+      end
+    end
+  end
 end

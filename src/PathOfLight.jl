@@ -18,6 +18,7 @@ module PathOfLight
   export to_ppm
   include("ppm.jl")
 
-  export matrix_compare, identity4, is_invertible, translation, scaling
+  export matrix_compare, identity4, is_invertible, translation, scaling,
+         rotation_x, rotation_y, rotation_z
   include("matrix.jl")
 end

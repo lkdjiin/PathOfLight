@@ -45,3 +45,30 @@ function scaling(x, y, z)
   result[3, 3] = z
   result
 end
+
+function rotation_x(radians)
+  result = copy(identity4)
+  result[2, 2] = cos(radians)
+  result[3, 3] = cos(radians)
+  result[2, 3] = -sin(radians)
+  result[3, 2] = sin(radians)
+  result
+end
+
+function rotation_y(radians)
+  result = copy(identity4)
+  result[1, 1] = cos(radians)
+  result[3, 3] = cos(radians)
+  result[1, 3] = sin(radians)
+  result[3, 1] = -sin(radians)
+  result
+end
+
+function rotation_z(radians)
+  result = copy(identity4)
+  result[1, 1] = cos(radians)
+  result[2, 2] = cos(radians)
+  result[1, 2] = -sin(radians)
+  result[2, 1] = sin(radians)
+  result
+end

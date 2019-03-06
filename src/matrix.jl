@@ -72,3 +72,14 @@ function rotation_z(radians)
   result[2, 1] = sin(radians)
   result
 end
+
+function shearing(xy, xz, yx, yz, zx, zy)
+  result = copy(identity4)
+  result[1, 2] = xy
+  result[1, 3] = xz
+  result[2, 1] = yx
+  result[2, 3] = yz
+  result[3, 1] = zx
+  result[3, 2] = zy
+  result
+end

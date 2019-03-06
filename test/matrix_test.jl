@@ -189,4 +189,42 @@
       end
     end
   end
+
+  @testset "Shearing" begin
+    @testset "moves x in proportion to y" begin
+      transform = shearing(1, 0, 0, 0, 0, 0)
+      p = point(2, 3, 4)
+      @test transform * p == point(5, 3, 4)
+    end
+
+    @testset "moves x in proportion to z" begin
+      transform = shearing(0, 1, 0, 0, 0, 0)
+      p = point(2, 3, 4)
+      @test transform * p == point(6, 3, 4)
+    end
+
+    @testset "moves y in proportion to x" begin
+      transform = shearing(0, 0, 1, 0, 0, 0)
+      p = point(2, 3, 4)
+      @test transform * p == point(2, 5, 4)
+    end
+
+    @testset "moves y in proportion to z" begin
+      transform = shearing(0, 0, 0, 1, 0, 0)
+      p = point(2, 3, 4)
+      @test transform * p == point(2, 7, 4)
+    end
+
+    @testset "moves z in proportion to x" begin
+      transform = shearing(0, 0, 0, 0, 1, 0)
+      p = point(2, 3, 4)
+      @test transform * p == point(2, 3, 6)
+    end
+
+    @testset "moves z in proportion to y" begin
+      transform = shearing(0, 0, 0, 0, 0, 1)
+      p = point(2, 3, 4)
+      @test transform * p == point(2, 3, 7)
+    end
+  end
 end

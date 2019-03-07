@@ -15,4 +15,20 @@
     @test location(r, 2.5) == point(4.5, 3, 4)
   end
 
+  @testset "Translating a ray" begin
+    r = Ray(point(1, 2, 3), vector(0, 1, 0))
+    m = translation(3, 4, 5)
+    r2 = transform(r, m)
+    @test r2.origin == point(4, 6, 8)
+    @test r2.direction == vector(0, 1, 0)
+  end
+
+  @testset "Scaling a ray" begin
+    r = Ray(point(1, 2, 3), vector(0, 1, 0))
+    m = scaling(2, 3, 4)
+    r2 = transform(r, m)
+    @test r2.origin == point(2, 6, 12)
+    @test r2.direction == vector(0, 3, 0)
+  end
+
 end

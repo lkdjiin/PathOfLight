@@ -24,9 +24,12 @@ module PathOfLight
          rotation_x, rotation_y, rotation_z, shearing
   include("matrix.jl")
 
-  export Ray, location
+  export Ray, location, transform
   include("ray.jl")
 
   export Sphere
   include("sphere.jl")
+
+  export Intersection, intersects, intersections, hit
+  include("intersection.jl")
 end

@@ -27,6 +27,6 @@ module PathOfLight
   export Ray, location
   include("ray.jl")
 
-  export Sphere, sphere
+  export Sphere
   include("sphere.jl")
 end

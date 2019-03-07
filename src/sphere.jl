@@ -2,6 +2,6 @@ struct Sphere
   id::String
 end
 
-function sphere()
+function Sphere()
   Sphere(string(UUIDs.uuid1()))
 end

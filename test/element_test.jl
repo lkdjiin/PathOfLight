@@ -84,6 +84,11 @@
       @test a.z == 3.0
       @test a.w == 0
     end
+
+    @testset "vector from a point" begin
+      p = point(1, 2, 3)
+      @test vector(p) == vector(1, 2, 3)
+    end
   end
 
   @testset "Basic Operations" begin

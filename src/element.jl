@@ -4,14 +4,6 @@ struct Element
   x::Float64
   y::Float64
   z::Float64
-end
-
-function ispoint(x::Element)
-  x.w == 1
-end
-
-function isvector(x::Element)
-  x.w == 0
   w::Float64
 end
 
@@ -21,6 +13,18 @@ end
 
 function vector(x, y, z)
   Element(x, y, z, 0)
+end
+
+function vector(el::Element)
+  Element(el.x, el.y, el.z, 0)
+end
+
+function ispoint(x::Element)
+  x.w == 1
+end
+
+function isvector(x::Element)
+  x.w == 0
 end
 
 function ==(a::Element, b::Element)

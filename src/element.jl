@@ -4,7 +4,6 @@ struct Element
   x::Float64
   y::Float64
   z::Float64
-  w::Int64
 end
 
 function ispoint(x::Element)
@@ -13,6 +12,7 @@ end
 
 function isvector(x::Element)
   x.w == 0
+  w::Float64
 end
 
 function point(x, y, z)

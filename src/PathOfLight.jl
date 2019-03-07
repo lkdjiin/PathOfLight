@@ -24,6 +24,9 @@ module PathOfLight
          rotation_x, rotation_y, rotation_z, shearing
   include("matrix.jl")
 
+  export Ray, location
+  include("ray.jl")
+
   export Sphere, sphere
   include("sphere.jl")
 end

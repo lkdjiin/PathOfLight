@@ -1,9 +1,11 @@
 module PathOfLight
 
   import LinearAlgebra: det
+  import UUIDs: uuid1
   import Base: ==, !=, +, -, *, /
 
   using LinearAlgebra
+  using UUIDs
 
   export Element, ispoint, isvector, point, vector, negate, magnitude,
          normalize, dot, cross
@@ -21,4 +23,7 @@ module PathOfLight
   export matrix_compare, identity4, is_invertible, translation, scaling,
          rotation_x, rotation_y, rotation_z, shearing
   include("matrix.jl")
+
+  export Sphere, sphere
+  include("sphere.jl")
 end

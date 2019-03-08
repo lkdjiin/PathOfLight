@@ -8,7 +8,7 @@ module PathOfLight
   using UUIDs
 
   export Element, ispoint, isvector, point, vector, negate, magnitude,
-         normalize, dot, cross
+         normalize, dot, cross, reflect
   include("element.jl")
 
   export Color

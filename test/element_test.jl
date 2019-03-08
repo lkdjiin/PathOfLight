@@ -136,13 +136,16 @@
     @test magnitude(vector(1, 0, 0)) == 1
     @test magnitude(vector(0, 1, 0)) == 1
     @test magnitude(vector(0, 0, 1)) == 1
-    @test isapprox(magnitude(vector(1, 2, 3)), sqrt(14), atol=PathOfLight.epsillon)
-    @test isapprox(magnitude(vector(-1, -2, -3)), sqrt(14), atol=PathOfLight.epsillon)
+    @test isapprox(magnitude(vector(1, 2, 3)),
+                   sqrt(14), atol=PathOfLight.epsillon)
+    @test isapprox(magnitude(vector(-1, -2, -3)),
+                   sqrt(14), atol=PathOfLight.epsillon)
   end
 
   @testset "normalize()" begin
     @test PathOfLight.normalize(vector(4, 0, 0)) == vector(1, 0, 0)
-    @test PathOfLight.normalize(vector(1, 2, 3)) == vector(0.26726, 0.53452, 0.80178)
+    @test PathOfLight.normalize(vector(1, 2, 3)) ==
+          vector(0.26726, 0.53452, 0.80178)
 
     @testset "magnitude of a normalized vector" begin
       v = vector(1, 2, 3)
@@ -163,4 +166,21 @@
     @test PathOfLight.cross(a, b) == vector(-1, 2, -1)
     @test PathOfLight.cross(b, a) == vector(1, -2, 1)
   end
+
+  @testset "reflect()" begin
+    @testset "Reflecting a vector approaching at 45°" begin
+      v = vector(1, -1, 0)
+      n = vector(0, 1, 0)
+      r = reflect(v, n)
+      @test r == vector(1, 1, 0)
+    end
+
+    @testset "Reflecting a vector off a slanted surface" begin
+      v = vector(0, -1, 0)
+      n = vector(√2/2, √2/2, 0)
+      r = reflect(v, n)
+      @test r == vector(1, 0, 0)
+    end
+  end
+
 end

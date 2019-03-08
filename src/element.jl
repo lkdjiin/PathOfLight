@@ -79,3 +79,7 @@ end
 function cross(a::Element, b::Element)
   vector(a.y * b.z - a.z * b.y, a.z * b.x - a.x * b.z, a.x * b.y - a.y * b.x)
 end
+
+function reflect(v::Element, normal::Element)
+  v - normal * 2 * dot(v, normal)
+end

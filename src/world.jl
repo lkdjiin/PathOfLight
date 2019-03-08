@@ -7,10 +7,9 @@ World() = World([], [])
 
 function default_world()
   s1 = Sphere()
-  material = color(s1.material, Color(0.8, 1.0, 0.6))
-  material = diffuse(material, 0.7)
-  material = specular(material, 0.2)
-  s1.material = material
+  s1.material.color = Color(0.8, 1.0, 0.6)
+  s1.material.diffuse = 0.7
+  s1.material.specular = 0.2
 
   s2 = Sphere()
   s2.transform = scaling(0.5, 0.5, 0.5)

@@ -36,7 +36,7 @@
   @testset "It may be assigned a material" begin
     s = Sphere()
     m = Material()
-    m = ambient(m, 1.0)
+    m.ambient = 1.0
     s.material = m
     @test s.material == m
   end

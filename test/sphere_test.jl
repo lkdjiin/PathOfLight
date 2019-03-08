@@ -15,7 +15,7 @@
     @test xs.i2.object == s
   end
 
-  @testset "A sphere's default transformation" begin
+  @testset "It has a default transformation" begin
     s = Sphere()
     @test s.transform == identity4
   end
@@ -25,6 +25,20 @@
     t = translation(2, 3, 4)
     s.transform = t
     @test s.transform == t
+  end
+
+  @testset "It has a default material" begin
+    s = Sphere()
+    m = s.material
+    @test m == Material()
+  end
+
+  @testset "It may be assigned a material" begin
+    s = Sphere()
+    m = Material()
+    m = ambient(m, 1.0)
+    s.material = m
+    @test s.material == m
   end
 
 end

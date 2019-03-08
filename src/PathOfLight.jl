@@ -30,7 +30,7 @@ module PathOfLight
   export Sphere
   include("sphere.jl")
 
-  export Intersection, intersects, intersections, hit
+  export Intersection, intersects, intersections, hit, prepare_computations
   include("intersection.jl")
 
   export normal_at

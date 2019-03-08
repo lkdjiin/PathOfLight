@@ -119,4 +119,37 @@
       @test i == i4
     end
   end
+
+  @testset "prepare_computations()" begin
+    r = Ray(point(0, 0, -5), vector(0, 0, 1))
+    shape = Sphere()
+    i = Intersection(shape, 4)
+    comps = prepare_computations(i, r)
+    @test comps.t == i.t
+    @test comps.object == i.object
+    @test comps.point == point(0, 0, -1)
+    @test comps.eyev == vector(0, 0, -1)
+    @test comps.normalv == vector(0, 0, -1)
+  end
+
+  @testset "The hit, when an intersection occurs on the outside" begin
+    r = Ray(point(0, 0, -5), vector(0, 0, 1))
+    shape = Sphere()
+    i = Intersection(shape, 4)
+    comps = prepare_computations(i, r)
+    @test comps.inside == false
+  end
+
+  @testset "The hit, when an intersection occurs on the inside" begin
+    r = Ray(point(0, 0, 0), vector(0, 0, 1))
+    shape = Sphere()
+    i = Intersection(shape, 1)
+    comps = prepare_computations(i, r)
+    @test comps.point == point(0, 0, 1)
+    @test comps.eyev == vector(0, 0, -1)
+    @test comps.inside == true
+    # normal would have been (0, 0, 1), but is inverted!
+    @test comps.normalv == vector(0, 0, -1)
+  end
+
 end

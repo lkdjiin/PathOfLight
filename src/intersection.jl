@@ -55,3 +55,19 @@ function hit(inters)
   pool = sort(pool, by=x -> x.t)
   first(pool)
 end
+
+function prepare_computations(i::Intersection, r::Ray)
+  t = Float64(i.t)
+  point = location(r, t)
+  eyev = -r.direction
+  normalv = normal_at(i.object, point)
+  inside = false
+
+  if dot(normalv, eyev) < 0
+    inside = true
+    normalv = -normalv
+  end
+
+  (t=t, object=i.object, point=point, eyev=eyev, normalv=normalv,
+   inside=inside)
+end

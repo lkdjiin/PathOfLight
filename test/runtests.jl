@@ -1,3 +1,5 @@
+start_time = time()
+
 include("../src/PathOfLight.jl")
 
 using Test
@@ -14,3 +16,6 @@ else
     end
   end
 end
+
+now = time() - start_time
+println("Done in $now seconds.")

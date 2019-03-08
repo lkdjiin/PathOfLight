@@ -38,4 +38,7 @@ module PathOfLight
 
   export PointLight
   include("light.jl")
+
+  export Material, color, ambient, diffuse, specular, shininess
+  include("material.jl")
 end

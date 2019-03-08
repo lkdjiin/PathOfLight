@@ -42,6 +42,6 @@ module PathOfLight
   export Material, lighting
   include("material.jl")
 
-  export World, default_world, intersect_world
+  export World, default_world, intersect_world, shade_hit, color_at
   include("world.jl")
 end

@@ -1,4 +1,4 @@
-struct World
+mutable struct World
   objects
   lights
 end
@@ -28,4 +28,19 @@ function intersect_world(w::World, r::Ray)
     end
   end
   sort(result, by=x -> x.t)
+end
+
+function shade_hit(w::World, comps)
+  lighting(comps.object.material, first(w.lights), comps.point, comps.eyev,
+           comps.normalv)
+end
+
+function color_at(w::World, r::Ray)
+  inters = intersect_world(w, r)
+  h = hit(inters)
+  if h == nothing
+    return Color(0, 0, 0)
+  end
+  comps = prepare_computations(h, r)
+  shade_hit(w, comps)
 end

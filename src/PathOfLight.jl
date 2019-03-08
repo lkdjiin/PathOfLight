@@ -35,4 +35,7 @@ module PathOfLight
 
   export normal_at
   include("normal.jl")
+
+  export PointLight
+  include("light.jl")
 end

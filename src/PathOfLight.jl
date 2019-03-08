@@ -32,4 +32,7 @@ module PathOfLight
 
   export Intersection, intersects, intersections, hit
   include("intersection.jl")
+
+  export normal_at
+  include("normal.jl")
 end

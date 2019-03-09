@@ -83,3 +83,16 @@ function shearing(xy, xz, yx, yz, zx, zy)
   result[3, 2] = zy
   result
 end
+
+function view_transform(from, to, up)
+  forwardv = normalize(to - from)
+  leftv = cross(forwardv, normalize(up))
+  true_upv = cross(leftv, forwardv)
+
+  orientation = [ leftv.x     leftv.y     leftv.z    0.0;
+                  true_upv.x  true_upv.y  true_upv.z 0.0;
+                 -forwardv.x -forwardv.y -forwardv.z 0.0;
+                  0.0         0.0         0.0        1.0]
+
+  orientation * translation(-from.x, -from.y, -from.z)
+end

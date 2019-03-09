@@ -236,4 +236,44 @@
     t = c * b * a
     @test t * p == Point(15, 0, 7)
   end
+
+  @testset "view_transform()" begin
+    @testset "The default orientation" begin
+      from = Point(0, 0, 0)
+      to = Point(0, 0, -1)
+      up = Agent(0, 1, 0)
+      t = view_transform(from, to, up)
+      @test t == identity4
+    end
+
+    @testset "When looking in positive z direction" begin
+      from = Point(0, 0, 0)
+      to = Point(0, 0, 1)
+      up = Agent(0, 1, 0)
+      t = view_transform(from, to, up)
+      @test t == scaling(-1, 1, -1)
+    end
+
+    @testset "It moves the world" begin
+      from = Point(0, 0, 8)
+      to = Point(0, 0, 0)
+      up = Agent(0, 1, 0)
+      t = view_transform(from, to, up)
+      @test t == translation(0, 0, -8)
+    end
+
+    @testset "An arbitrary view transformation" begin
+      from = Point(1, 3, 2)
+      to = Point(4, -2, 8)
+      up = Agent(1, 1, 0)
+      t = view_transform(from, to, up)
+
+      expected = [-0.50709  0.50709  0.67612  -2.36643;
+                   0.76772  0.60609  0.12122  -2.82843;
+                  -0.35857  0.59761 -0.71714   0.00000;
+                  0.00000  0.00000  0.00000   1.00000]
+
+      @test matrix_compare(expected, t)
+    end
+  end
 end

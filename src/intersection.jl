@@ -32,7 +32,7 @@ end
 # always 1.
 function discriminant(ray)
   # The vector from the sphere's center, to the ray origin.
-  sphere_to_ray = ray.origin - point(0, 0, 0)
+  sphere_to_ray = ray.origin - Point(0, 0, 0)
 
   a = dot(ray.direction, ray.direction)
   b = 2 * dot(ray.direction, sphere_to_ray)

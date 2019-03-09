@@ -14,55 +14,55 @@
   @testset "lighting()" begin
     @testset "with the eye between the light and the surface" begin
       m = Material()
-      position = point(0, 0, 0)
+      position = Point(0, 0, 0)
 
-      eyev = vector(0, 0, -1)
-      normalv = vector(0, 0, -1)
-      light = PointLight(point(0, 0, -10), Color(1, 1, 1))
+      eyev = Vektor(0, 0, -1)
+      normalv = Vektor(0, 0, -1)
+      light = PointLight(Point(0, 0, -10), Color(1, 1, 1))
       result = lighting(m, light, position, eyev, normalv)
       @test result == Color(1.9, 1.9, 1.9)
     end
 
     @testset "with the eye between light and surface, eye offset 45°" begin
       m = Material()
-      position = point(0, 0, 0)
+      position = Point(0, 0, 0)
 
-      eyev = vector(0, √2/2, -√2/2)
-      normalv = vector(0, 0, -1)
-      light = PointLight(point(0, 0, -10), Color(1, 1, 1))
+      eyev = Vektor(0, √2/2, -√2/2)
+      normalv = Vektor(0, 0, -1)
+      light = PointLight(Point(0, 0, -10), Color(1, 1, 1))
       result = lighting(m, light, position, eyev, normalv)
       @test result == Color(1.0, 1.0, 1.0)
     end
 
     @testset "with eye opposite surface, light offset 45°" begin
       m = Material()
-      position = point(0, 0, 0)
+      position = Point(0, 0, 0)
 
-      eyev = vector(0, 0, -1)
-      normalv = vector(0, 0, -1)
-      light = PointLight(point(0, 10, -10), Color(1, 1, 1))
+      eyev = Vektor(0, 0, -1)
+      normalv = Vektor(0, 0, -1)
+      light = PointLight(Point(0, 10, -10), Color(1, 1, 1))
       result = lighting(m, light, position, eyev, normalv)
       @test result == Color(0.7364, 0.7364, 0.7364)
     end
 
     @testset "with eye in the path of the reflection vector" begin
       m = Material()
-      position = point(0, 0, 0)
+      position = Point(0, 0, 0)
 
-      eyev = vector(0, -√2/2, -√2/2)
-      normalv = vector(0, 0, -1)
-      light = PointLight(point(0, 10, -10), Color(1, 1, 1))
+      eyev = Vektor(0, -√2/2, -√2/2)
+      normalv = Vektor(0, 0, -1)
+      light = PointLight(Point(0, 10, -10), Color(1, 1, 1))
       result = lighting(m, light, position, eyev, normalv)
       @test result == Color(1.6364, 1.6364, 1.6364)
     end
 
     @testset "with the light behind the surface" begin
       m = Material()
-      position = point(0, 0, 0)
+      position = Point(0, 0, 0)
 
-      eyev = vector(0, 0, -1)
-      normalv = vector(0, 0, -1)
-      light = PointLight(point(0, 0, 10), Color(1, 1, 1))
+      eyev = Vektor(0, 0, -1)
+      normalv = Vektor(0, 0, -1)
+      light = PointLight(Point(0, 0, 10), Color(1, 1, 1))
       result = lighting(m, light, position, eyev, normalv)
       @test result == Color(0.1, 0.1, 0.1)
     end

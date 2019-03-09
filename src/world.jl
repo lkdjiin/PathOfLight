@@ -14,7 +14,7 @@ function default_world()
   s2 = Sphere()
   s2.transform = scaling(0.5, 0.5, 0.5)
 
-  light = PointLight(point(-10, 10, -10), Color(1, 1, 1))
+  light = PointLight(Point(-10, 10, -10), Color(1, 1, 1))
 
   World([s1, s2], [light])
 end

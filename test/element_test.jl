@@ -2,83 +2,83 @@
 
   @testset "Comparisons" begin
     @testset "ispoint()" begin
-      a = Element(4.3, -4.2, 3.1, 1)
+      a = Element(4.3, -4.2, 3.1, 1.0)
       @test ispoint(a) == true
-      a = Element(4.3, -4.2, 3.1, 0)
+      a = Element(4.3, -4.2, 3.1, 0.0)
       @test ispoint(a) == false
     end
 
     @testset "isvector()" begin
-      a = Element(4.3, -4.2, 3.1, 1)
+      a = Element(4.3, -4.2, 3.1, 1.0)
       @test isvector(a) == false
-      a = Element(4.3, -4.2, 3.1, 0)
+      a = Element(4.3, -4.2, 3.1, 0.0)
       @test isvector(a) == true
     end
 
     @testset "==()" begin
       @testset "A vector is not a point" begin
-        a = point(1.0, 3.0, 5.0)
-        b = vector(1.0, 3.0, 5.0)
+        a = Point(1.0, 3.0, 5.0)
+        b = Vektor(1.0, 3.0, 5.0)
         @test !(a == b)
       end
 
       @testset "Two identical points" begin
-        a = point(1.0, 3.0, 5.0)
-        b = point(1.0000000000000002, 3.0, 5.0)
+        a = Point(1.0, 3.0, 5.0)
+        b = Point(1.0000000000000002, 3.0, 5.0)
         @test a == b
       end
 
       @testset "Two different points" begin
-        a = point(1.0, 3.0, 5.0)
-        b = point(1.01, 3.0, 5.0)
+        a = Point(1.0, 3.0, 5.0)
+        b = Point(1.01, 3.0, 5.0)
         @test !(a == b)
       end
 
       @testset "Two identical vectors" begin
-        a = vector(1.0, 3.0, 5.0)
-        b = vector(1.0000000000000002, 3.0, 5.0)
+        a = Vektor(1.0, 3.0, 5.0)
+        b = Vektor(1.0000000000000002, 3.0, 5.0)
         @test a == b
       end
 
       @testset "Two different vectors" begin
-        a = vector(1.0, 3.0, 5.0)
-        b = vector(1.01, 3.0, 5.0)
+        a = Vektor(1.0, 3.0, 5.0)
+        b = Vektor(1.01, 3.0, 5.0)
         @test !(a == b)
       end
     end
 
     @testset "!=()" begin
       @testset "A vector is not a point" begin
-        a = point(1.0, 3.0, 5.0)
-        b = vector(1.0, 3.0, 5.0)
+        a = Point(1.0, 3.0, 5.0)
+        b = Vektor(1.0, 3.0, 5.0)
         @test a != b
       end
 
       @testset "Two identical points" begin
-        a = point(1.0, 3.0, 5.0)
-        b = point(1.0, 3.0, 5.0)
+        a = Point(1.0, 3.0, 5.0)
+        b = Point(1.0, 3.0, 5.0)
         @test !(a != b)
       end
 
       @testset "Two different points" begin
-        a = point(1.0, 3.0, 5.0)
-        b = point(2.0, 3.0, 5.0)
+        a = Point(1.0, 3.0, 5.0)
+        b = Point(2.0, 3.0, 5.0)
         @test a != b
       end
     end
   end
 
   @testset "Constructors" begin
-    @testset "point()" begin
-      a = point(1.2, 3.4, 5.6)
+    @testset "Point()" begin
+      a = Point(1.2, 3.4, 5.6)
       @test a.x == 1.2
       @test a.y == 3.4
       @test a.z == 5.6
-      @test a.w == 1
+      @test a.w == 1.0
     end
 
-    @testset "vector()" begin
-      a = vector(1.0, 2.0, 3.0)
+    @testset "Vektor()" begin
+      a = Vektor(1.0, 2.0, 3.0)
       @test a.x == 1.0
       @test a.y == 2.0
       @test a.z == 3.0
@@ -86,30 +86,30 @@
     end
 
     @testset "vector from a point" begin
-      p = point(1, 2, 3)
-      @test vector(p) == vector(1, 2, 3)
+      p = Point(1, 2, 3)
+      @test Vektor(p) == Vektor(1, 2, 3)
     end
   end
 
   @testset "Basic Operations" begin
     @testset "Adding two elements" begin
-      result = point(3, -2, 5) + vector(-2, 3, 1)
-      @test result == point(1, 1, 6)
+      result = Point(3, -2, 5) + Vektor(-2, 3, 1)
+      @test result == Point(1, 1, 6)
     end
 
     @testset "Substracting two points" begin
-      result = point(3, 2, 1) - point(5, 6, 7)
-      @test result == vector(-2, -4, -6)
+      result = Point(3, 2, 1) - Point(5, 6, 7)
+      @test result == Vektor(-2, -4, -6)
     end
 
     @testset "Substracting a vector from a point" begin
-      result = point(3, 2, 1) - vector(5, 6, 7)
-      @test result == point(-2, -4, -6)
+      result = Point(3, 2, 1) - Vektor(5, 6, 7)
+      @test result == Point(-2, -4, -6)
     end
 
     @testset "Substracting two vectors" begin
-      result = vector(3, 2, 1) - vector(5, 6, 7)
-      @test result == vector(-2, -4, -6)
+      result = Vektor(3, 2, 1) - Vektor(5, 6, 7)
+      @test result == Vektor(-2, -4, -6)
     end
 
     @testset "Negating an element" begin
@@ -133,53 +133,53 @@
   end
 
   @testset "magnitude()" begin
-    @test magnitude(vector(1, 0, 0)) == 1
-    @test magnitude(vector(0, 1, 0)) == 1
-    @test magnitude(vector(0, 0, 1)) == 1
-    @test isapprox(magnitude(vector(1, 2, 3)),
+    @test magnitude(Vektor(1, 0, 0)) == 1
+    @test magnitude(Vektor(0, 1, 0)) == 1
+    @test magnitude(Vektor(0, 0, 1)) == 1
+    @test isapprox(magnitude(Vektor(1, 2, 3)),
                    sqrt(14), atol=PathOfLight.epsillon)
-    @test isapprox(magnitude(vector(-1, -2, -3)),
+    @test isapprox(magnitude(Vektor(-1, -2, -3)),
                    sqrt(14), atol=PathOfLight.epsillon)
   end
 
   @testset "normalize()" begin
-    @test PathOfLight.normalize(vector(4, 0, 0)) == vector(1, 0, 0)
-    @test PathOfLight.normalize(vector(1, 2, 3)) ==
-          vector(0.26726, 0.53452, 0.80178)
+    @test PathOfLight.normalize(Vektor(4, 0, 0)) == Vektor(1, 0, 0)
+    @test PathOfLight.normalize(Vektor(1, 2, 3)) ==
+          Vektor(0.26726, 0.53452, 0.80178)
 
     @testset "magnitude of a normalized vector" begin
-      v = vector(1, 2, 3)
+      v = Vektor(1, 2, 3)
       norm = PathOfLight.normalize(v)
       @test magnitude(norm) == 1
     end
   end
 
   @testset "dot()" begin
-    a = vector(1, 2, 3)
-    b = vector(2, 3, 4)
+    a = Vektor(1, 2, 3)
+    b = Vektor(2, 3, 4)
     @test PathOfLight.dot(a, b) == 20
   end
 
   @testset "cross()" begin
-    a = vector(1, 2, 3)
-    b = vector(2, 3, 4)
-    @test PathOfLight.cross(a, b) == vector(-1, 2, -1)
-    @test PathOfLight.cross(b, a) == vector(1, -2, 1)
+    a = Vektor(1, 2, 3)
+    b = Vektor(2, 3, 4)
+    @test PathOfLight.cross(a, b) == Vektor(-1, 2, -1)
+    @test PathOfLight.cross(b, a) == Vektor(1, -2, 1)
   end
 
   @testset "reflect()" begin
     @testset "Reflecting a vector approaching at 45°" begin
-      v = vector(1, -1, 0)
-      n = vector(0, 1, 0)
+      v = Vektor(1, -1, 0)
+      n = Vektor(0, 1, 0)
       r = reflect(v, n)
-      @test r == vector(1, 1, 0)
+      @test r == Vektor(1, 1, 0)
     end
 
     @testset "Reflecting a vector off a slanted surface" begin
-      v = vector(0, -1, 0)
-      n = vector(√2/2, √2/2, 0)
+      v = Vektor(0, -1, 0)
+      n = Vektor(√2/2, √2/2, 0)
       r = reflect(v, n)
-      @test r == vector(1, 0, 0)
+      @test r == Vektor(1, 0, 0)
     end
   end
 

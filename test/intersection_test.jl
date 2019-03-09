@@ -19,7 +19,7 @@
 
   @testset "Spheres and rays" begin
     @testset "A ray intersects a sphere at two points" begin
-      r = Ray(Point(0, 0, -5), Vektor(0, 0, 1))
+      r = Ray(Point(0, 0, -5), Agent(0, 0, 1))
       s = Sphere()
       xs = intersects(s, r)
       @test length(xs) == 2
@@ -28,7 +28,7 @@
     end
 
     @testset "A ray intersects a sphere at a tangent" begin
-      r = Ray(Point(0, 1, -5), Vektor(0, 0, 1))
+      r = Ray(Point(0, 1, -5), Agent(0, 0, 1))
       s = Sphere()
       xs = intersects(s, r)
       @test length(xs) == 2
@@ -37,14 +37,14 @@
     end
 
     @testset "A ray misses a sphere" begin
-      r = Ray(Point(0, 2, -5), Vektor(0, 0, 1))
+      r = Ray(Point(0, 2, -5), Agent(0, 0, 1))
       s = Sphere()
       xs = intersects(s, r)
       @test length(xs) == 0
     end
 
     @testset "A ray originates inside a sphere" begin
-      r = Ray(Point(0, 0, 0), Vektor(0, 0, 1))
+      r = Ray(Point(0, 0, 0), Agent(0, 0, 1))
       s = Sphere()
       xs = intersects(s, r)
       @test length(xs) == 2
@@ -53,7 +53,7 @@
     end
 
     @testset "A sphere is behind a ray" begin
-      r = Ray(Point(0, 0, 5), Vektor(0, 0, 1))
+      r = Ray(Point(0, 0, 5), Agent(0, 0, 1))
       s = Sphere()
       xs = intersects(s, r)
       @test length(xs) == 2
@@ -62,7 +62,7 @@
     end
 
     @testset "Intersecting a scaled sphere with a ray" begin
-      r = Ray(Point(0, 0, -5), Vektor(0, 0, 1))
+      r = Ray(Point(0, 0, -5), Agent(0, 0, 1))
       s = Sphere()
       s.transform = scaling(2, 2, 2)
       xs = intersects(s, r)
@@ -72,7 +72,7 @@
     end
 
     @testset "Intersecting a translated sphere with a ray" begin
-      r = Ray(Point(0, 0, -5), Vektor(0, 0, 1))
+      r = Ray(Point(0, 0, -5), Agent(0, 0, 1))
       s = Sphere()
       s.transform = translation(5, 0, 0)
       xs = intersects(s, r)
@@ -121,19 +121,19 @@
   end
 
   @testset "prepare_computations()" begin
-    r = Ray(Point(0, 0, -5), Vektor(0, 0, 1))
+    r = Ray(Point(0, 0, -5), Agent(0, 0, 1))
     shape = Sphere()
     i = Intersection(shape, 4)
     comps = prepare_computations(i, r)
     @test comps.t == i.t
     @test comps.object == i.object
     @test comps.point == Point(0, 0, -1)
-    @test comps.eyev == Vektor(0, 0, -1)
-    @test comps.normalv == Vektor(0, 0, -1)
+    @test comps.eyev == Agent(0, 0, -1)
+    @test comps.normalv == Agent(0, 0, -1)
   end
 
   @testset "The hit, when an intersection occurs on the outside" begin
-    r = Ray(Point(0, 0, -5), Vektor(0, 0, 1))
+    r = Ray(Point(0, 0, -5), Agent(0, 0, 1))
     shape = Sphere()
     i = Intersection(shape, 4)
     comps = prepare_computations(i, r)
@@ -141,15 +141,15 @@
   end
 
   @testset "The hit, when an intersection occurs on the inside" begin
-    r = Ray(Point(0, 0, 0), Vektor(0, 0, 1))
+    r = Ray(Point(0, 0, 0), Agent(0, 0, 1))
     shape = Sphere()
     i = Intersection(shape, 1)
     comps = prepare_computations(i, r)
     @test comps.point == Point(0, 0, 1)
-    @test comps.eyev == Vektor(0, 0, -1)
+    @test comps.eyev == Agent(0, 0, -1)
     @test comps.inside == true
     # normal would have been (0, 0, 1), but is inverted!
-    @test comps.normalv == Vektor(0, 0, -1)
+    @test comps.normalv == Agent(0, 0, -1)
   end
 
 end

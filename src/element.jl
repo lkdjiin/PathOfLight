@@ -9,9 +9,9 @@ end
 
 Point(x, y, z) = Element(x, y, z, 1.0)
 
-Vektor(x, y, z) = Element(x, y, z, 0.0)
+Agent(x, y, z) = Element(x, y, z, 0.0)
 
-Vektor(el::Element) = Element(el.x, el.y, el.z, 0)
+Agent(el::Element) = Element(el.x, el.y, el.z, 0)
 
 function ispoint(x::Element)
   x.w == 1
@@ -71,7 +71,7 @@ function dot(a::Element, b::Element)
 end
 
 function cross(a::Element, b::Element)
-  Vektor(a.y * b.z - a.z * b.y, a.z * b.x - a.x * b.z, a.x * b.y - a.y * b.x)
+  Agent(a.y * b.z - a.z * b.y, a.z * b.x - a.x * b.z, a.x * b.y - a.y * b.x)
 end
 
 function reflect(v::Element, normal::Element)

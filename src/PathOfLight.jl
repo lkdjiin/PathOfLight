@@ -7,7 +7,7 @@ module PathOfLight
   using LinearAlgebra
   using UUIDs
 
-  export Element, Point, Vektor, ispoint, isvector, negate, magnitude,
+  export Element, Point, Agent, ispoint, isvector, negate, magnitude,
          normalize, dot, cross, reflect
   include("element.jl")
 

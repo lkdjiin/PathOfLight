@@ -7,7 +7,7 @@
   end
 
   @testset "Intersect sets the object on the intersection" begin
-    r = Ray(Point(0, 0, -5), Vektor(0, 0, 1))
+    r = Ray(Point(0, 0, -5), Agent(0, 0, 1))
     s = Sphere()
     xs = intersects(s, r)
     @test length(xs) == 2

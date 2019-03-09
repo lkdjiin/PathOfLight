@@ -115,7 +115,7 @@
 
     @testset "Translation does not affect vectors" begin
       transform = translation(5, -3, 2)
-      v = Vektor(-3, 4, 5)
+      v = Agent(-3, 4, 5)
       @test transform * v == v
     end
   end
@@ -129,15 +129,15 @@
 
     @testset "A scaling matrix applied to a vector" begin
       transform = scaling(2, 3, 4)
-      v = Vektor(-4, 6, 8)
-      @test transform * v == Vektor(-8, 18, 32)
+      v = Agent(-4, 6, 8)
+      @test transform * v == Agent(-8, 18, 32)
     end
 
     @testset "Multiplying by the inverse of a scaling matrix" begin
       transform = scaling(2, 3, 4)
       inversed = inv(transform)
-      v = Vektor(-4, 6, 8)
-      @test inversed * v == Vektor(-2, 2, 2)
+      v = Agent(-4, 6, 8)
+      @test inversed * v == Agent(-2, 2, 2)
     end
 
     @testset "Reflection is scaling by a negative value" begin

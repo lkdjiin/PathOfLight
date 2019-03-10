@@ -47,7 +47,7 @@ end
 
 function render(c::Camera, w::World)::Canvas
   hsize = round(Int, c.hsize)
-  vsize = round(Int, c.hsize)
+  vsize = round(Int, c.vsize)
   image = Canvas(width=hsize, height=vsize)
   for y in 0:vsize - 1
     for x in 0:hsize - 1

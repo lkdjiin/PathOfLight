@@ -55,6 +55,18 @@
       image = render(c, w)
       @test read_pixel(image, x=5, y=5) == Color(0.38066, 0.47583, 0.2855)
     end
+
+    @testset "Canvas has same size as the camera" begin
+      w = default_world()
+      from = Point(0, 0, -5)
+      to = Point(0, 0, 0)
+      up = Agent(0, 1, 0)
+      transform = view_transform(from, to, up)
+      c = Camera(10, 12, π/2, transform=transform)
+      image = render(c, w)
+      @test c.hsize == image.width
+      @test c.vsize == image.height
+    end
   end
 
 end

@@ -44,4 +44,7 @@ module PathOfLight
 
   export World, default_world, intersect_world, shade_hit, color_at
   include("world.jl")
+
+  export Camera, ray_for_pixel, render
+  include("camera.jl")
 end

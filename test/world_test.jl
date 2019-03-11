@@ -47,17 +47,6 @@
       c = shade_hit(w, comps)
       @test c == Color(0.90498, 0.90498, 0.90498)
     end
-
-    #= @testset "in shadow" begin =#
-    #=   w = default_world() =#
-    #=   w.lights = [PointLight(Point(-5, 0, 0), Color(1, 1, 1))] =#
-    #=   r = Ray(Point(5, 0, 0), Agent(-1, 0, 0)) =#
-    #=   shape = first(w.objects) =#
-    #=   i = Intersection(shape, 2) =#
-    #=   comps = prepare_computations(i, r) =#
-    #=   c = shade_hit(w, comps) =#
-    #=   @test c == Color(0, 0, 0) =#
-    #= end =#
   end
 
   @testset "color_at()" begin

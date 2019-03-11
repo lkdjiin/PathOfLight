@@ -20,7 +20,8 @@ function ==(m1::Material, m2::Material)
 end
 
 function lighting(m::Material, light::PointLight, point::Element,
-                  eyev::Element, normalv::Element)
+                  eyev::Element, normalv::Element;
+                  in_shadow=false)
   # Combine the surface color with the light's color/intensity.
   effective_color = m.color * light.intensity
 
@@ -29,6 +30,10 @@ function lighting(m::Material, light::PointLight, point::Element,
 
   # Compute the ambient contribution.
   ambient = effective_color * m.ambient
+
+  if in_shadow
+    return ambient
+  end
 
   # light_dot_normal represents the cosine of the angle between the
   # light vector and the normal vector. A negative number means the
@@ -55,5 +60,6 @@ function lighting(m::Material, light::PointLight, point::Element,
       specular = light.intensity * m.specular * factor
     end
   end
+
   ambient + diffuse + specular
 end

@@ -47,6 +47,17 @@
       c = shade_hit(w, comps)
       @test c == Color(0.90498, 0.90498, 0.90498)
     end
+
+    #= @testset "in shadow" begin =#
+    #=   w = default_world() =#
+    #=   w.lights = [PointLight(Point(-5, 0, 0), Color(1, 1, 1))] =#
+    #=   r = Ray(Point(5, 0, 0), Agent(-1, 0, 0)) =#
+    #=   shape = first(w.objects) =#
+    #=   i = Intersection(shape, 2) =#
+    #=   comps = prepare_computations(i, r) =#
+    #=   c = shade_hit(w, comps) =#
+    #=   @test c == Color(0, 0, 0) =#
+    #= end =#
   end
 
   @testset "color_at()" begin
@@ -73,6 +84,32 @@
       r = Ray(Point(0, 0, 0.75), Agent(0, 0, -1))
       c = color_at(w, r)
       @test c == inner.material.color
+    end
+  end
+
+  @testset "isshadowed()" begin
+    @testset "when nothing is collinear with point and light" begin
+      w = default_world()
+      p = Point(0, 10, 0)
+      @test isshadowed(w, p) == false
+    end
+
+    @testset "when an object is between the point and the light" begin
+      w = default_world()
+      p = Point(10, -10, 10)
+      @test isshadowed(w, p) == true
+    end
+
+    @testset "when an object is behind the light" begin
+      w = default_world()
+      p = Point(-20, 20, -20)
+      @test isshadowed(w, p) == false
+    end
+
+    @testset "when an object is behind the point" begin
+      w = default_world()
+      p = Point(-2, 2, -2)
+      @test isshadowed(w, p) == false
     end
   end
 

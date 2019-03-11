@@ -23,6 +23,17 @@
       @test result == Color(1.9, 1.9, 1.9)
     end
 
+    @testset "with the surface in shadow" begin
+      m = Material()
+      position = Point(0, 0, 0)
+
+      eyev = Agent(0, 0, -1)
+      normalv = Agent(0, 0, -1)
+      light = PointLight(Point(0, 0, -10), Color(1, 1, 1))
+      result = lighting(m, light, position, eyev, normalv, in_shadow=true)
+      @test result == Color(0.1, 0.1, 0.1)
+    end
+
     @testset "with the eye between light and surface, eye offset 45°" begin
       m = Material()
       position = Point(0, 0, 0)

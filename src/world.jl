@@ -31,8 +31,12 @@ function intersect_world(w::World, r::Ray)
 end
 
 function shade_hit(w::World, comps)
+  shadowed = isshadowed(w, comps.over_point)
+
   lighting(comps.object.material, first(w.lights), comps.point, comps.eyev,
            comps.normalv)
+  lighting(comps.object.material, first(w.lights), comps.point, comps.eyev,
+           comps.normalv, in_shadow=shadowed)
 end
 
 function color_at(w::World, r::Ray)
@@ -43,4 +47,17 @@ function color_at(w::World, r::Ray)
   end
   comps = prepare_computations(h, r)
   shade_hit(w, comps)
+end
+
+function isshadowed(w::World, p::Element)
+  v = first(w.lights).position - p
+  distance = magnitude(v)
+  r = Ray(p, normalize(v))
+  inters = intersect_world(w, r)
+  h = hit(inters)
+  if h != nothing && h.t < distance
+    true
+  else
+    false
+  end
 end

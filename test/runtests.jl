@@ -3,7 +3,6 @@ start_time = time()
 include("../src/PathOfLight.jl")
 
 using Test
-using .PathOfLight
 
 @testset "PathOfLight Tests" begin
   # FIXME We must be in the project root directory for the following to

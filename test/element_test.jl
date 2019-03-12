@@ -137,19 +137,19 @@
     @test magnitude(Agent(0, 1, 0)) == 1
     @test magnitude(Agent(0, 0, 1)) == 1
     @test isapprox(magnitude(Agent(1, 2, 3)),
-                   sqrt(14), atol=PathOfLight.epsilon)
+                   sqrt(14), atol=epsilon)
     @test isapprox(magnitude(Agent(-1, -2, -3)),
-                   sqrt(14), atol=PathOfLight.epsilon)
+                   sqrt(14), atol=epsilon)
   end
 
   @testset "normalize()" begin
-    @test PathOfLight.normalize(Agent(4, 0, 0)) == Agent(1, 0, 0)
-    @test PathOfLight.normalize(Agent(1, 2, 3)) ==
+    @test normalize(Agent(4, 0, 0)) == Agent(1, 0, 0)
+    @test normalize(Agent(1, 2, 3)) ==
           Agent(0.26726, 0.53452, 0.80178)
 
     @testset "magnitude of a normalized vector" begin
       v = Agent(1, 2, 3)
-      norm = PathOfLight.normalize(v)
+      norm = normalize(v)
       @test magnitude(norm) == 1
     end
   end
@@ -157,14 +157,14 @@
   @testset "dot()" begin
     a = Agent(1, 2, 3)
     b = Agent(2, 3, 4)
-    @test PathOfLight.dot(a, b) == 20
+    @test dot(a, b) == 20
   end
 
   @testset "cross()" begin
     a = Agent(1, 2, 3)
     b = Agent(2, 3, 4)
-    @test PathOfLight.cross(a, b) == Agent(-1, 2, -1)
-    @test PathOfLight.cross(b, a) == Agent(1, -2, 1)
+    @test cross(a, b) == Agent(-1, 2, -1)
+    @test cross(b, a) == Agent(1, -2, 1)
   end
 
   @testset "reflect()" begin

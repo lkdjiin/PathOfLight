@@ -28,6 +28,15 @@ function intersects(sphere::Sphere, ray::Ray)
   return (i1=i1, i2=i2)
 end
 
+function intersects(plane::Plane, ray::Ray)
+  if abs(ray.direction.y) < epsilon
+    return []
+  end
+
+  t = -ray.origin.y / ray.direction.y
+  (i1=Intersection(plane, t), )
+end
+
 # Remember: the sphere is centered at the world origin and its radius is
 # always 1.
 function discriminant(ray)

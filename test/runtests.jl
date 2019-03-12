@@ -8,7 +8,9 @@ using Test
   # FIXME We must be in the project root directory for the following to
   # work.
   if length(ARGS) > 0
-    include(ARGS[1] * "_test.jl")
+    for e in ARGS
+      include(e * "_test.jl")
+    end
   else
     for file in readdir("test")
       if length(file) > 8 && file[end-7:end] == "_test.jl"

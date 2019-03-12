@@ -125,7 +125,7 @@
       shape.transform = translation(0, 0, 1)
       i = Intersection(shape, 5)
       comps = prepare_computations(i, r)
-      @test comps.over_point.z < -PathOfLight.epsillon/2
+      @test comps.over_point.z < -PathOfLight.epsilon/2
       @test comps.point.z > comps.over_point.z
     end
   end

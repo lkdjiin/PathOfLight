@@ -13,10 +13,10 @@ end
 
 function ==(m1::Material, m2::Material)
   m1.color == m2.color &&
-    isapprox(m1.ambient, m2.ambient, atol=epsillon) &&
-    isapprox(m1.diffuse, m2.diffuse, atol=epsillon) &&
-    isapprox(m1.specular, m2.specular, atol=epsillon) &&
-    isapprox(m1.shininess, m2.shininess, atol=epsillon)
+    isapprox(m1.ambient, m2.ambient, atol=epsilon) &&
+    isapprox(m1.diffuse, m2.diffuse, atol=epsilon) &&
+    isapprox(m1.specular, m2.specular, atol=epsilon) &&
+    isapprox(m1.shininess, m2.shininess, atol=epsilon)
 end
 
 function lighting(m::Material, light::PointLight, point::Element,

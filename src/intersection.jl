@@ -68,7 +68,7 @@ function prepare_computations(i::Intersection, r::Ray)
     normalv = -normalv
   end
 
-  over_point = point + normalv * epsillon
+  over_point = point + normalv * epsilon
 
   (t=t, object=i.object, point=point, over_point=over_point, eyev=eyev,
    normalv=normalv, inside=inside)

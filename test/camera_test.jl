@@ -12,12 +12,12 @@
 
   @testset "The pixel size for a horizontal canvas" begin
     c = Camera(200, 125, π/2)
-    @test isapprox(c.pixel_size, 0.01, atol=PathOfLight.epsillon)
+    @test isapprox(c.pixel_size, 0.01, atol=PathOfLight.epsilon)
   end
 
   @testset "The pixel size for a vertical canvas" begin
     c = Camera(125, 200, π/2)
-    @test isapprox(c.pixel_size, 0.01, atol=PathOfLight.epsillon)
+    @test isapprox(c.pixel_size, 0.01, atol=PathOfLight.epsilon)
   end
 
   @testset "ray_for_pixel()" begin

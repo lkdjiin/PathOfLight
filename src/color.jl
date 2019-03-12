@@ -11,9 +11,9 @@ function Color((r, g, b))
 end
 
 function ==(a::Color, b::Color)
-  if isapprox(a.red, b.red, atol=epsillon) &&
-    isapprox(a.green, b.green, atol=epsillon) &&
-    isapprox(a.blue, b.blue, atol=epsillon)
+  if isapprox(a.red, b.red, atol=epsilon) &&
+    isapprox(a.green, b.green, atol=epsilon) &&
+    isapprox(a.blue, b.blue, atol=epsilon)
      return true
   else
      return false

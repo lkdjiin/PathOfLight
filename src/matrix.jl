@@ -9,7 +9,7 @@ function matrix_compare(a, b)
   end
 
   for i in eachindex(a)
-    if !isapprox(a[i], b[i], atol=epsillon)
+    if !isapprox(a[i], b[i], atol=epsilon)
       return false
     end
   end

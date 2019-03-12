@@ -1,4 +1,4 @@
-const epsillon = 0.00001::Float64
+const epsilon = 0.00001::Float64
 
 struct Element
   x::Float64
@@ -25,8 +25,8 @@ function ==(a::Element, b::Element)
   if a.w ≠ b.w
     return false
   end
-  if isapprox(a.x, b.x, atol=epsillon) && isapprox(a.y, b.y, atol=epsillon) &&
-                                          isapprox(a.z, b.z, atol=epsillon)
+  if isapprox(a.x, b.x, atol=epsilon) && isapprox(a.y, b.y, atol=epsilon) &&
+                                          isapprox(a.z, b.z, atol=epsilon)
      return true
   else
      return false

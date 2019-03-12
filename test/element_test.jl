@@ -137,9 +137,9 @@
     @test magnitude(Agent(0, 1, 0)) == 1
     @test magnitude(Agent(0, 0, 1)) == 1
     @test isapprox(magnitude(Agent(1, 2, 3)),
-                   sqrt(14), atol=PathOfLight.epsillon)
+                   sqrt(14), atol=PathOfLight.epsilon)
     @test isapprox(magnitude(Agent(-1, -2, -3)),
-                   sqrt(14), atol=PathOfLight.epsillon)
+                   sqrt(14), atol=PathOfLight.epsilon)
   end
 
   @testset "normalize()" begin

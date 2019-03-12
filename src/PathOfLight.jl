@@ -25,6 +25,9 @@ include("matrix.jl")
 export Ray, location, transform
 include("ray.jl")
 
+export Shape
+include("shape.jl")
+
 export Sphere
 include("sphere.jl")
 

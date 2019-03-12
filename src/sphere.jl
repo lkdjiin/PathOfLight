@@ -1,4 +1,4 @@
-mutable struct Sphere
+mutable struct Sphere <: Shape
   id::String
   transform
   material

@@ -13,6 +13,7 @@ end
 # intersections.
 function intersects(sphere::Sphere, ray::Ray)
   object_space_ray = transform(ray, inv(sphere.transform))
+
   d = discriminant(object_space_ray)
 
   if d.discr < 0
@@ -29,11 +30,13 @@ function intersects(sphere::Sphere, ray::Ray)
 end
 
 function intersects(plane::Plane, ray::Ray)
-  if abs(ray.direction.y) < epsilon
+  object_space_ray = transform(ray, inv(plane.transform))
+
+  if abs(object_space_ray.direction.y) < epsilon
     return []
   end
 
-  t = -ray.origin.y / ray.direction.y
+  t = -object_space_ray.origin.y / object_space_ray.direction.y
   (i1=Intersection(plane, t), )
 end
 

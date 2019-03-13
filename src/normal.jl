@@ -6,5 +6,8 @@ function normal_at(s::Sphere, world_point::Element)
 end
 
 function normal_at(p::Plane, world_point::Element)
-  Agent(0, 1, 0)
+  local_point = inv(p.transform) * world_point
+  local_normal = Agent(0, 1, 0)
+  world_normal = permutedims(inv(p.transform)) * local_normal
+  normalize(Agent(world_normal))
 end

@@ -41,6 +41,9 @@ include("normal.jl")
 export PointLight
 include("light.jl")
 
+export StripePattern, stripe_at
+include("pattern.jl")
+
 export Material, lighting
 include("material.jl")
 
@@ -49,3 +52,4 @@ include("world.jl")
 
 export Camera, ray_for_pixel, render
 include("camera.jl")
+

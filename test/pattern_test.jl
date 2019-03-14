@@ -80,4 +80,30 @@
     end
   end
 
+  @testset "3D Checkers" begin
+    @testset "It repeats in x" begin
+      object = Sphere()
+      pattern = CheckersPattern(white, black)
+      @test pattern_at(pattern, object, Point(0, 0, 0)) == white
+      @test pattern_at(pattern, object, Point(0.99, 0, 0)) == white
+      @test pattern_at(pattern, object, Point(1.01, 0, 0)) == black
+    end
+
+    @testset "It repeats in y" begin
+      object = Sphere()
+      pattern = CheckersPattern(white, black)
+      @test pattern_at(pattern, object, Point(0, 0, 0)) == white
+      @test pattern_at(pattern, object, Point(0, 0.99, 0)) == white
+      @test pattern_at(pattern, object, Point(0, 1.01, 0)) == black
+    end
+
+    @testset "It repeats in z" begin
+      object = Sphere()
+      pattern = CheckersPattern(white, black)
+      @test pattern_at(pattern, object, Point(0, 0, 0)) == white
+      @test pattern_at(pattern, object, Point(0, 0, 0.99)) == white
+      @test pattern_at(pattern, object, Point(0, 0, 1.01)) == black
+    end
+  end
+
 end

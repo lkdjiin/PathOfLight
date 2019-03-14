@@ -24,6 +24,14 @@ mutable struct RingPattern <: Pattern
   RingPattern(a, b) = new(a, b, identity4)
 end
 
+mutable struct CheckersPattern <: Pattern
+  a::Color
+  b::Color
+  transform
+
+  CheckersPattern(a, b) = new(a, b, identity4)
+end
+
 function pattern_at(pattern::Pattern, object::Shape,
                     world_point::Element)::Color
   object_point = inv(object.transform) * world_point
@@ -32,7 +40,8 @@ function pattern_at(pattern::Pattern, object::Shape,
 end
 
 module PatternH
-  using Main: StripePattern, GradientPattern, RingPattern, Element, Color
+  using Main: StripePattern, GradientPattern, RingPattern, CheckersPattern,
+              Element, Color
 
   function pattern_at(pattern::StripePattern, point::Element)::Color
     if Base.floor(point.x) % 2 == 0
@@ -54,4 +63,11 @@ module PatternH
     end
   end
 
+  function pattern_at(pattern::CheckersPattern, p::Element)::Color
+    if (Base.floor(p.x) + Base.floor(p.y) + Base.floor(p.z)) % 2 == 0
+      pattern.a
+    else
+      pattern.b
+    end
+  end
 end

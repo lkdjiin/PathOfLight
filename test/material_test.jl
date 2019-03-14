@@ -19,7 +19,7 @@
       eyev = Agent(0, 0, -1)
       normalv = Agent(0, 0, -1)
       light = PointLight(Point(0, 0, -10), Color(1, 1, 1))
-      result = lighting(m, light, position, eyev, normalv)
+      result = lighting(m, Sphere(), light, position, eyev, normalv)
       @test result == Color(1.9, 1.9, 1.9)
     end
 
@@ -30,7 +30,8 @@
       eyev = Agent(0, 0, -1)
       normalv = Agent(0, 0, -1)
       light = PointLight(Point(0, 0, -10), Color(1, 1, 1))
-      result = lighting(m, light, position, eyev, normalv, in_shadow=true)
+      result = lighting(m, Sphere(), light, position, eyev, normalv,
+                        in_shadow=true)
       @test result == Color(0.1, 0.1, 0.1)
     end
 
@@ -41,7 +42,7 @@
       eyev = Agent(0, √2/2, -√2/2)
       normalv = Agent(0, 0, -1)
       light = PointLight(Point(0, 0, -10), Color(1, 1, 1))
-      result = lighting(m, light, position, eyev, normalv)
+      result = lighting(m, Sphere(), light, position, eyev, normalv)
       @test result == Color(1.0, 1.0, 1.0)
     end
 
@@ -52,7 +53,7 @@
       eyev = Agent(0, 0, -1)
       normalv = Agent(0, 0, -1)
       light = PointLight(Point(0, 10, -10), Color(1, 1, 1))
-      result = lighting(m, light, position, eyev, normalv)
+      result = lighting(m, Sphere(), light, position, eyev, normalv)
       @test result == Color(0.7364, 0.7364, 0.7364)
     end
 
@@ -63,7 +64,7 @@
       eyev = Agent(0, -√2/2, -√2/2)
       normalv = Agent(0, 0, -1)
       light = PointLight(Point(0, 10, -10), Color(1, 1, 1))
-      result = lighting(m, light, position, eyev, normalv)
+      result = lighting(m, Sphere(), light, position, eyev, normalv)
       @test result == Color(1.6364, 1.6364, 1.6364)
     end
 
@@ -74,11 +75,12 @@
       eyev = Agent(0, 0, -1)
       normalv = Agent(0, 0, -1)
       light = PointLight(Point(0, 0, 10), Color(1, 1, 1))
-      result = lighting(m, light, position, eyev, normalv)
+      result = lighting(m, Sphere(), light, position, eyev, normalv)
       @test result == Color(0.1, 0.1, 0.1)
     end
 
     @testset "with a pattern applied" begin
+      placeholder = Sphere()
       m = Material()
       m.pattern = StripePattern(white, black)
       m.ambient = 1
@@ -87,8 +89,10 @@
       eyev = Agent(0, 0, -1)
       normalv = Agent(0, 0, -1)
       light = PointLight(Point(0, 0, -10), Color(1, 1, 1))
-      c1 = lighting(m, light, Point(0.9, 0, 0), eyev, normalv, in_shadow=false)
-      c2 = lighting(m, light, Point(1.1, 0, 0), eyev, normalv, in_shadow=false)
+      c1 = lighting(m, placeholder, light, Point(0.9, 0, 0), eyev, normalv,
+                    in_shadow=false)
+      c2 = lighting(m, placeholder, light, Point(1.1, 0, 0), eyev, normalv,
+                    in_shadow=false)
       @test c1 == white
       @test c2 == black
     end

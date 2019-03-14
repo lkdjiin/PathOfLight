@@ -31,6 +31,31 @@
       @test stripe_at(pattern, Point(-1.1, 0, 0)) == red
     end
 
+    @testset "with an object transformation" begin
+      object = Sphere()
+      object.transform = scaling(2, 2, 2)
+      pattern = StripePattern(red, black)
+      c = stripe_at_object(pattern, object, Point(1.5, 0, 0))
+      @test c == red
+    end
+
+    @testset "with a pattern transformation" begin
+      object = Sphere()
+      pattern = StripePattern(blue, black)
+      pattern.transform = scaling(2, 2, 2)
+      c = stripe_at_object(pattern, object, Point(1.5, 0, 0))
+      @test c == blue
+    end
+
+    @testset "with both an object and a pattern transformation" begin
+      object = Sphere()
+      object.transform = scaling(2, 2, 2)
+      pattern = StripePattern(black, white)
+      pattern.transform = translation(0.5, 0, 0)
+      c = stripe_at_object(pattern, object, Point(2.5, 0, 0))
+      @test c == black
+    end
+
   end
 
 end

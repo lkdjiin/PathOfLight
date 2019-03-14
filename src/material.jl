@@ -20,11 +20,11 @@ function ==(m1::Material, m2::Material)
     isapprox(m1.shininess, m2.shininess, atol=epsilon)
 end
 
-function lighting(m::Material, light::PointLight, point::Element,
+function lighting(m::Material, object::Shape, light::PointLight, point::Element,
                   eyev::Element, normalv::Element;
                   in_shadow=false)
 
-  color = MaterialH.compute_color(m, point, light)
+  color = MaterialH.compute_color(m, object, point, light)
   lightv = MaterialH.light_source_direction(light, point)
   ambient = color * m.ambient
 
@@ -49,13 +49,13 @@ function lighting(m::Material, light::PointLight, point::Element,
 end
 
 module MaterialH
-  using Main: stripe_at, normalize, reflect, dot, Color
+  using Main: stripe_at_object, normalize, reflect, dot, Color
 
-  function compute_color(m, point, light)
+  function compute_color(m, object, point, light)
     if m.pattern == nothing
       color = m.color
     else
-      color = stripe_at(m.pattern, point)
+      color = stripe_at_object(m.pattern, object, point)
     end
 
     color * light.intensity

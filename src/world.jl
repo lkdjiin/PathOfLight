@@ -33,10 +33,10 @@ end
 function shade_hit(w::World, comps)
   shadowed = isshadowed(w, comps.over_point)
 
-  lighting(comps.object.material, first(w.lights), comps.point, comps.eyev,
-           comps.normalv)
-  lighting(comps.object.material, first(w.lights), comps.point, comps.eyev,
-           comps.normalv, in_shadow=shadowed)
+  lighting(comps.object.material, comps.object, first(w.lights), comps.point,
+           comps.eyev, comps.normalv)
+  lighting(comps.object.material, comps.object, first(w.lights), comps.point,
+           comps.eyev, comps.normalv, in_shadow=shadowed)
 end
 
 function color_at(w::World, r::Ray)

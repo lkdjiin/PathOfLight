@@ -41,7 +41,7 @@ include("normal.jl")
 export PointLight
 include("light.jl")
 
-export StripePattern, stripe_at, stripe_at_object
+export StripePattern, GradientPattern, pattern_at
 include("pattern.jl")
 
 export Material, lighting

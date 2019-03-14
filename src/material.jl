@@ -4,7 +4,7 @@ mutable struct Material
   diffuse::Float64
   specular::Float64
   shininess::Float64
-  pattern::Union{StripePattern, Nothing}
+  pattern::Union{Pattern, Nothing}
 end
 
 # With default values.
@@ -49,13 +49,13 @@ function lighting(m::Material, object::Shape, light::PointLight, point::Element,
 end
 
 module MaterialH
-  using Main: stripe_at_object, normalize, reflect, dot, Color
+  using Main: pattern_at, normalize, reflect, dot, Color
 
   function compute_color(m, object, point, light)
     if m.pattern == nothing
       color = m.color
     else
-      color = stripe_at_object(m.pattern, object, point)
+      color = pattern_at(m.pattern, object, point)
     end
 
     color * light.intensity

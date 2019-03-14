@@ -66,7 +66,18 @@
       @test pattern_at(pattern, object, Point(0.5, 0, 0)) == Color(0.5, 0.5, 0.5)
       @test pattern_at(pattern, object, Point(0.75, 0, 0)) == Color(0.25, 0.25, 0.25)
     end
+  end
 
+  @testset "Ring" begin
+    @testset "It extends in both x and z" begin
+      object = Sphere()
+      pattern = RingPattern(white, black)
+      @test pattern_at(pattern, object, Point(0, 0, 0)) == white
+      @test pattern_at(pattern, object, Point(1, 0, 0)) == black
+      @test pattern_at(pattern, object, Point(0, 0, 1)) == black
+      # 0.708 = just slightly more than √ 2/2
+      @test pattern_at(pattern, object, Point(0.708, 0, 0.708)) == black
+    end
   end
 
 end

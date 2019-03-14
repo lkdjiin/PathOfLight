@@ -16,6 +16,14 @@ mutable struct GradientPattern <: Pattern
   GradientPattern(a, b) = new(a, b, identity4)
 end
 
+mutable struct RingPattern <: Pattern
+  a::Color
+  b::Color
+  transform
+
+  RingPattern(a, b) = new(a, b, identity4)
+end
+
 function pattern_at(pattern::Pattern, object::Shape,
                     world_point::Element)::Color
   object_point = inv(object.transform) * world_point
@@ -24,7 +32,7 @@ function pattern_at(pattern::Pattern, object::Shape,
 end
 
 module PatternH
-  using Main: StripePattern, GradientPattern, Element, Color
+  using Main: StripePattern, GradientPattern, RingPattern, Element, Color
 
   function pattern_at(pattern::StripePattern, point::Element)::Color
     if Base.floor(point.x) % 2 == 0
@@ -36,6 +44,14 @@ module PatternH
 
   function pattern_at(pattern::GradientPattern, point::Element)::Color
     pattern.a + (pattern.b - pattern.a) * (point.x - Base.floor(point.x))
+  end
+
+  function pattern_at(pattern::RingPattern, p::Element)::Color
+    if Base.floor(sqrt(p.x ^ 2 + p.z ^ 2)) % 2 == 0.0
+      pattern.a
+    else
+      pattern.b
+    end
   end
 
 end

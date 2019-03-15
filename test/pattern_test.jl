@@ -106,4 +106,8 @@
     end
   end
 
+  @testset "Radial gradient" begin
+    pattern = RadialGradientPattern(white, black)
+  end
+
 end

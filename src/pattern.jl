@@ -32,6 +32,14 @@ mutable struct CheckersPattern <: Pattern
   CheckersPattern(a, b) = new(a, b, identity4)
 end
 
+mutable struct RadialGradientPattern <: Pattern
+  a::Color
+  b::Color
+  transform
+
+  RadialGradientPattern(a, b) = new(a, b, identity4)
+end
+
 function pattern_at(pattern::Pattern, object::Shape,
                     world_point::Element)::Color
   object_point = inv(object.transform) * world_point
@@ -41,7 +49,7 @@ end
 
 module PatternH
   using Main: StripePattern, GradientPattern, RingPattern, CheckersPattern,
-              Element, Color
+              RadialGradientPattern, Element, Color, magnitude
 
   function pattern_at(pattern::StripePattern, point::Element)::Color
     if Base.floor(point.x) % 2 == 0
@@ -61,6 +69,13 @@ module PatternH
     else
       pattern.b
     end
+  end
+
+  function pattern_at(pattern::RadialGradientPattern, p::Element)::Color
+    distance = pattern.b - pattern.a
+    m = magnitude(p)
+    fraction = m - Base.floor(m)
+    pattern.a + distance * fraction
   end
 
   function pattern_at(pattern::CheckersPattern, p::Element)::Color

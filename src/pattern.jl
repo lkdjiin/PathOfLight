@@ -40,11 +40,17 @@ mutable struct RadialGradientPattern <: Pattern
   RadialGradientPattern(a, b) = new(a, b, identity4)
 end
 
+# Main entry to call a simple Pattern.
 function pattern_at(pattern::Pattern, object::Shape,
                     world_point::Element)::Color
   object_point = inv(object.transform) * world_point
   pattern_point = inv(pattern.transform) * object_point
   PatternH.pattern_at(pattern, pattern_point)
+end
+
+# Typically called by a ComposedPatternH function.
+function pattern_at(p::Pattern, pp::Element)
+  PatternH.pattern_at(p, pp)
 end
 
 module PatternH

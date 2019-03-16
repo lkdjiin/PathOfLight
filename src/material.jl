@@ -4,7 +4,7 @@ mutable struct Material
   diffuse::Float64
   specular::Float64
   shininess::Float64
-  pattern::Union{Pattern, Nothing}
+  pattern::Union{Pattern, ComposedPattern, Nothing}
 end
 
 # With default values.

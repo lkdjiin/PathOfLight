@@ -41,8 +41,8 @@ include("normal.jl")
 export PointLight
 include("light.jl")
 
-export StripePattern, GradientPattern, RingPattern, CheckersPattern,
-       RadialGradientPattern, StripeCheckersPattern, pattern_at
+export pattern_at, StripePattern, GradientPattern, RingPattern, CheckersPattern,
+       RadialGradientPattern, StripeCheckersPattern, BlendedPattern
 include("pattern.jl")
 include("composed_pattern.jl")
 

@@ -8,6 +8,8 @@
       @test m.diffuse == 0.9
       @test m.specular == 0.9
       @test m.shininess == 200.0
+      @test m.pattern == nothing
+      @test m.noise == nothing
     end
   end
 
@@ -79,10 +81,11 @@
       @test result == Color(0.1, 0.1, 0.1)
     end
 
-    @testset "with a pattern applied" begin
+    @testset "with pattern and noise applied" begin
       placeholder = Sphere()
       m = Material()
       m.pattern = StripePattern(white, black)
+      m.noise = Noise(:perlin_noise, 0.1)
       m.ambient = 1
       m.diffuse = 0
       m.specular = 0

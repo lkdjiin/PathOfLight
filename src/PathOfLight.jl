@@ -5,7 +5,8 @@ import Base: ==, !=, +, -, *, /
 using LinearAlgebra
 using UUIDs
 
-export PerlinNoise
+export Noise, PerlinNoise
+include("noise.jl")
 include("perlin.jl")
 
 export Element, Point, Agent, ispoint, isvector, negate, magnitude,

@@ -5,11 +5,12 @@ mutable struct Material
   specular::Float64
   shininess::Float64
   pattern::Union{Pattern, ComposedPattern, Nothing}
+  noise::Union{Noise, Nothing}
 end
 
 # With default values.
 function Material()
-  Material(Color(1, 1, 1), 0.1, 0.9, 0.9, 200.0, nothing)
+  Material(Color(1, 1, 1), 0.1, 0.9, 0.9, 200.0, nothing, nothing)
 end
 
 function ==(m1::Material, m2::Material)
@@ -49,13 +50,20 @@ function lighting(m::Material, object::Shape, light::PointLight, point::Element,
 end
 
 module MaterialH
-  using Main: pattern_at, normalize, reflect, dot, Color
+  using Main: pattern_at, normalize, reflect, dot, Color, PerlinNoise, Point,
+              Material
 
-  function compute_color(m, object, point, light)
+  function compute_color(m::Material, object, point, light)
     if m.pattern == nothing
       color = m.color
     else
-      color = pattern_at(m.pattern, object, point)
+      if m.noise == nothing
+        color = pattern_at(m.pattern, object, point)
+      else
+        delta = m.noise.func(point.x, point.y, point.z) * m.noise.ratio
+        new_point = Point(point.x + delta, point.y + delta, point.z + delta)
+        color = pattern_at(m.pattern, object, new_point)
+      end
     end
 
     color * light.intensity

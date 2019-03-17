@@ -99,7 +99,13 @@
       @test c1 == white
       @test c2 == black
     end
+  end
 
+  @testset "Reflectivity" begin
+    @testset "For the default material" begin
+      m = Material()
+      @test m.reflective == 0.0
+    end
   end
 
 end

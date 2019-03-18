@@ -1,5 +1,5 @@
 mutable struct World
-  objects
+  objects::Array{Shape}
   lights
 end
 
@@ -30,21 +30,26 @@ function intersect_world(w::World, r::Ray)
   sort(result, by=x -> x.t)
 end
 
-function shade_hit(w::World, comps)
+function shade_hit(w::World, comps, remaining=4)
   shadowed = isshadowed(w, comps.over_point)
 
-  lighting(comps.object.material, comps.object, first(w.lights),
-           comps.over_point, comps.eyev, comps.normalv, in_shadow=shadowed)
+  surface = lighting(comps.object.material, comps.object, first(w.lights),
+                     comps.over_point, comps.eyev, comps.normalv,
+                     in_shadow=shadowed)
+
+  reflected = reflected_color(w, comps, remaining)
+
+  surface + reflected
 end
 
-function color_at(w::World, r::Ray)
+function color_at(w::World, r::Ray, remaining=1)
   inters = intersect_world(w, r)
   h = hit(inters)
   if h == nothing
     return Color(0, 0, 0)
   end
   comps = prepare_computations(h, r)
-  shade_hit(w, comps)
+  shade_hit(w, comps, remaining)
 end
 
 function isshadowed(w::World, p::Element)
@@ -57,5 +62,15 @@ function isshadowed(w::World, p::Element)
     true
   else
     false
+  end
+end
+
+function reflected_color(w::World, comps, remaining)
+  if remaining < 1 || comps.object.material.reflective == 0.0
+    black
+  else
+    reflect_ray = Ray(comps.over_point, comps.reflectv)
+    color = color_at(w, reflect_ray, remaining - 1)
+    color * comps.object.material.reflective
   end
 end

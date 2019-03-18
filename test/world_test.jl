@@ -102,4 +102,71 @@
     end
   end
 
+  @testset "reflections" begin
+    @testset "The reflected color for a nonreflective material" begin
+      w = default_world()
+      r = Ray(Point(0, 0, 0), Agent(0, 0, 1))
+      shape = w.objects[2]
+      shape.material.ambient = 1
+      i = Intersection(shape, 1)
+      comps = prepare_computations(i, r)
+      color = reflected_color(w, comps, 1)
+      @test color == Color(0, 0, 0)
+    end
+
+    @testset "The reflected color for a reflective material" begin
+      w = default_world()
+      shape = Plane()
+      shape.material.reflective = 0.5
+      shape.transform = translation(0, -1, 0)
+      push!(w.objects, shape)
+      r = Ray(Point(0, 0, -3), Agent(0, -√2/2, √2/2))
+      i = Intersection(shape, √2)
+      comps = prepare_computations(i, r)
+      color = reflected_color(w, comps, 1)
+      @test color == Color(0.19033, 0.23791, 0.142749)
+    end
+
+    @testset "shade_hit() with a reflective material" begin
+      w = default_world()
+      shape = Plane()
+      shape.material.reflective = 0.5
+      shape.transform = translation(0, -1, 0)
+      push!(w.objects, shape)
+      r = Ray(Point(0, 0, -3), Agent(0, -√2/2, √2/2))
+      i = Intersection(shape, √2)
+      comps = prepare_computations(i, r)
+      color = shade_hit(w, comps)
+      @test color == Color(0.87675, 0.92434, 0.82917)
+    end
+
+    @testset "color_at() with mutually reflective surfaces" begin
+      w = World()
+      push!(w.lights, PointLight(Point(0, 0, 0), Color(1, 1, 1)))
+      lower = Plane()
+      lower.material.reflective = 1.0
+      lower.transform = translation(0, -1, 0)
+      push!(w.objects, lower)
+      upper = Plane()
+      upper.material.reflective = 1.0
+      upper.transform = translation(0, 1, 0)
+      push!(w.objects, upper)
+      r = Ray(Point(0, 0, 0), Agent(0, 1, 0))
+      @test color_at(w, r) isa Color
+    end
+
+    @testset "The reflected color at the maximum recursive depth" begin
+      w = default_world()
+      shape = Plane()
+      shape.material.reflective = 0.5
+      shape.transform = translation(0, -1, 0)
+      push!(w.objects, shape)
+      r = Ray(Point(0, 0, -3), Agent(0, -√2/2, √2/2))
+      i = Intersection(shape, √2)
+      comps = prepare_computations(i, r)
+      color = reflected_color(w, comps, 0)
+      @test color == black
+    end
+
+  end
 end

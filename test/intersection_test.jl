@@ -162,4 +162,12 @@
     @test comps.normalv == Agent(0, 0, -1)
   end
 
+  @testset "Precomputing the reflection vector" begin
+    shape = Plane()
+    r = Ray(Point(0, 1, -1), Agent(0, -√2/2, √2/2))
+    i = Intersection(shape, √2)
+    comps = prepare_computations(i, r)
+    @test comps.reflectv == Agent(0, √2/2, √2/2)
+  end
+
 end

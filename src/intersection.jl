@@ -68,7 +68,16 @@ function hit(inters)
   first(pool)
 end
 
-function prepare_computations(i::Intersection, r::Ray)
+# Returns
+#   - t:
+#   - object:
+#   - point:
+#   - over_point:
+#   - eyev: Agent
+#   - normalv: Agent
+#   - inside: Boolean, true means inside the object.
+#   - reflectv: Agent
+function prepare_computations(i::Intersection, r::Ray)::NamedTuple
   t = Float64(i.t)
   point = location(r, t)
   eyev = -r.direction
@@ -81,7 +90,8 @@ function prepare_computations(i::Intersection, r::Ray)
   end
 
   over_point = point + normalv * epsilon
+  reflectv = reflect(r.direction, normalv)
 
   (t=t, object=i.object, point=point, over_point=over_point, eyev=eyev,
-   normalv=normalv, inside=inside)
+   normalv=normalv, inside=inside, reflectv=reflectv)
 end

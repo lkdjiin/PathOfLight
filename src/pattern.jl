@@ -1,5 +1,11 @@
 abstract type Pattern end
 
+# Minimal pattern for testing purposes only.
+mutable struct TestPattern <: Pattern
+  transform
+  TestPattern() = new(identity4)
+end
+
 mutable struct StripePattern <: Pattern
   a::Color
   b::Color
@@ -55,7 +61,11 @@ end
 
 module PatternH
   using Main: StripePattern, GradientPattern, RingPattern, CheckersPattern,
-              RadialGradientPattern, Element, Color, magnitude
+              RadialGradientPattern, TestPattern, Element, Color, magnitude
+
+  function pattern_at(pattern::TestPattern, p::Element)::Color
+    Color(p.x, p.y, p.z)
+  end
 
   function pattern_at(pattern::StripePattern, point::Element)::Color
     if Base.floor(point.x) % 2 == 0

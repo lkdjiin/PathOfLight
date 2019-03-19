@@ -167,6 +167,99 @@
       color = reflected_color(w, comps, 0)
       @test color == black
     end
+  end
+
+  @testset "refractions" begin
+    @testset "with an opaque surface" begin
+      w = default_world()
+      shape = w.objects[1]
+      r = Ray(Point(0, 0, -5), Agent(0, 0, 1))
+      xs = intersections(Intersection(shape, 4), Intersection(shape, 6))
+      comps = prepare_computations(xs[1], r, xs)
+      c = refracted_color(w, comps, 5)
+      @test c == black
+    end
+
+    @testset "at the maximum recursive depth" begin
+      w = default_world()
+      shape = w.objects[1]
+      shape.material.transparency = 1.0
+      shape.material.refractive_index = 1.5
+      r = Ray(Point(0, 0, -5), Agent(0, 0, 1))
+      xs = intersections(Intersection(shape, 4), Intersection(shape, 6))
+      comps = prepare_computations(xs[1], r, xs)
+      c = refracted_color(w, comps, 0)
+      @test c == black
+    end
+
+    @testset "under total internal reflection" begin
+      w = default_world()
+      shape = w.objects[1]
+      shape.material.transparency = 1.0
+      shape.material.refractive_index = 1.5
+      r = Ray(Point(0, 0, √2/2), Agent(0, 1, 0))
+      xs = intersections(Intersection(shape, -√2/2), Intersection(shape, √2/2))
+      # NOTE: this time you're inside the sphere, so you need
+      # to look at the second intersection, xs[2], not xs[1]
+      comps = prepare_computations(xs[2], r, xs)
+      c = refracted_color(w, comps, 5)
+      @test c == black
+    end
+
+    @testset "with a refracted ray" begin
+      w = default_world()
+      a = w.objects[1]
+      a.material.ambient = 1.0
+      a.material.pattern = TestPattern()
+      b = w.objects[2]
+      b.material.transparency = 1.0
+      b.material.refractive_index = 1.5
+      r = Ray(Point(0, 0, 0.1), Agent(0, 1, 0))
+      xs = intersections(Intersection(a, -0.9899), Intersection(b, -0.4899),
+                         Intersection(b, 0.4899), Intersection(a, 0.9899))
+      comps = prepare_computations(xs[3], r, xs)
+      c = refracted_color(w, comps, 5)
+      @test c == Color(0, 0.99888, 0.04721)
+    end
+
+    @testset "shade_hit() with a transparent material" begin
+      w = default_world()
+      floor = Plane()
+      floor.transform = translation(0, -1, 0)
+      floor.material.transparency = 0.5
+      floor.material.refractive_index = 1.5
+      push!(w.objects, floor)
+      ball = Sphere()
+      ball.material.color = Color(1, 0, 0)
+      ball.material.ambient = 0.5
+      ball.transform = translation(0, -3.5, -0.5)
+      push!(w.objects, ball)
+      r = Ray(Point(0, 0, -3), Agent(0, -√2/2, √2/2))
+      xs = intersections(Intersection(floor, √2))
+      comps = prepare_computations(xs[1], r, xs)
+      color = shade_hit(w, comps, 5)
+      @test color == Color(0.93642, 0.68642, 0.68642)
+    end
+
+    @testset "shade_hit() with a reflective, transparent material" begin
+      w = default_world()
+      r = Ray(Point(0, 0, -3), Agent(0, -√2/2, √2/2))
+      floor = Plane()
+      floor.transform = translation(0, -1, 0)
+      floor.material.reflective = 0.5
+      floor.material.transparency = 0.5
+      floor.material.refractive_index = 1.5
+      push!(w.objects, floor)
+      ball = Sphere()
+      ball.material.color = Color(1, 0, 0)
+      ball.material.ambient = 0.5
+      ball.transform = translation(0, -3.5, -0.5)
+      push!(w.objects, ball)
+      xs = intersections(Intersection(floor, √2))
+      comps = prepare_computations(xs[1], r, xs)
+      color = shade_hit(w, comps, 5)
+      @test color == Color(0.93391, 0.69643, 0.69243)
+    end
 
   end
 end

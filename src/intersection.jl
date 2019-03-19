@@ -33,7 +33,7 @@ function intersects(plane::Plane, ray::Ray)
   object_space_ray = transform(ray, inv(plane.transform))
 
   if abs(object_space_ray.direction.y) < epsilon
-    return []
+    return ()
   end
 
   t = -object_space_ray.origin.y / object_space_ray.direction.y
@@ -72,12 +72,16 @@ end
 #   - t:
 #   - object:
 #   - point:
-#   - over_point:
+#   - over_point: a point very slightly over the point of interest.
+#   - under_point: a point very slightly under the point of interest.
 #   - eyev: Agent
 #   - normalv: Agent
 #   - inside: Boolean, true means inside the object.
 #   - reflectv: Agent
-function prepare_computations(i::Intersection, r::Ray)::NamedTuple
+#   - n1: entry refractive index
+#   - n2: exit refractive index
+function prepare_computations(i::Intersection, r::Ray,
+                              list_of_intersections=())::NamedTuple
   t = Float64(i.t)
   point = location(r, t)
   eyev = -r.direction
@@ -89,9 +93,78 @@ function prepare_computations(i::Intersection, r::Ray)::NamedTuple
     normalv = -normalv
   end
 
-  over_point = point + normalv * epsilon
+  delta = normalv * epsilon
+  over_point = point + delta
+  under_point = point - delta
   reflectv = reflect(r.direction, normalv)
 
-  (t=t, object=i.object, point=point, over_point=over_point, eyev=eyev,
-   normalv=normalv, inside=inside, reflectv=reflectv)
+  if isempty(list_of_intersections)
+    list_of_intersections = (i,)
+  end
+  n1, n2 = IntersectionH.refractive_indices(list_of_intersections, i)
+
+  (t=t, object=i.object, point=point, over_point=over_point,
+   under_point=under_point, eyev=eyev, normalv=normalv, inside=inside,
+   reflectv=reflectv, n1=n1, n2=n2)
+end
+
+# Christophe Schlick designed a fast implementation of an approximation
+# to the Fresnel Effect.
+function schlick(comps)
+  # find the cosine of the angle between the eye and normal vectors
+  cos = dot(comps.eyev, comps.normalv)
+
+  # total internal reflection can only occur if n1 > n2
+  if comps.n1 > comps.n2
+    n = comps.n1 / comps.n2
+    sin2_t = n^2 * (1.0 - cos^2)
+    if sin2_t > 1.0
+      return 1.0
+    end
+    # compute cosine of theta_t using trig identity
+    cos_t = sqrt(1.0 - sin2_t)
+    # when n1 > n2, use cos(theta_t) instead
+    cos = cos_t
+  end
+
+  r0 = ((comps.n1 - comps.n2) / (comps.n1 + comps.n2))^2
+  return r0 + (1 - r0) * (1 - cos)^5
+end
+
+module IntersectionH
+  using Main: Intersection
+
+  function refractive_indices(inters::Tuple, hit::Intersection)
+    containers = []
+    n1 = nothing
+    n2 = nothing
+
+    for elem in inters
+      if elem == hit
+        if isempty(containers)
+          n1 = 1.0
+        else
+          n1 = last(containers).material.refractive_index
+        end
+      end
+
+      idx = findfirst(x -> x == elem.object, containers)
+      if idx == nothing
+        push!(containers, elem.object)
+      else
+        deleteat!(containers, idx)
+      end
+
+      if elem == hit
+        if isempty(containers)
+          n2 = 1.0
+        else
+          n2 = last(containers).material.refractive_index
+        end
+        break
+      end
+    end
+
+    (n1, n2)
+  end
 end

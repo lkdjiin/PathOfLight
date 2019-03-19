@@ -108,4 +108,11 @@
     end
   end
 
+  @testset "Transparency and refractive index" begin
+    @testset "for the default material" begin
+      m = Material()
+      @test m.transparency == 0.0
+      @test m.refractive_index == 1.0
+    end
+  end
 end

@@ -7,19 +7,23 @@ mutable struct Material
   pattern::Union{Pattern, ComposedPattern, Nothing}
   noise::Union{Noise, Nothing}
   reflective::Float64
+  transparency::Float64
+  refractive_index::Float64
 end
 
 # With default values.
 #   color: white
-#   ambient: 0.1
-#   diffuse: 0.9
-#   specular: 0.9
-#   shininess: 200.0
+#   ambient: 0.1 (from 0 to 1)
+#   diffuse: 0.9 (from 0 to 1)
+#   specular: 0.9 (from 0 to 1)
+#   shininess: 200.0 (a tiny spotlight)
 #   pattern: nothing
 #   noise: nothing
-#   reflective: 0.0
+#   reflective: 0.0 (from 0 no reflections to 1 full reflection)
+#   transparency: 0.0 (so it's opaque)
+#   refractive_index: 1.0 (the value for the vacuum/air)
 function Material()
-  Material(white, 0.1, 0.9, 0.9, 200.0, nothing, nothing, 0.0)
+  Material(white, 0.1, 0.9, 0.9, 200.0, nothing, nothing, 0.0, 0.0, 1.0)
 end
 
 function ==(m1::Material, m2::Material)

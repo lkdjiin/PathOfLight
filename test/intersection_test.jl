@@ -17,6 +17,18 @@
     @test xs[2].t == 2
   end
 
+  @testset "==()" begin
+    s1 = Sphere()
+    s2 = Sphere()
+    i1 = Intersection(s1, 1)
+    i2 = Intersection(s1, 2)
+    @test i1 != i2
+    i3 = Intersection(s1, 1)
+    @test i1 == i3
+    i4 = Intersection(s2, 1)
+    @test i1 != i4
+  end
+
   @testset "Spheres and rays" begin
     @testset "A ray intersects a sphere at two points" begin
       r = Ray(Point(0, 0, -5), Agent(0, 0, 1))
@@ -168,6 +180,162 @@
     i = Intersection(shape, √2)
     comps = prepare_computations(i, r)
     @test comps.reflectv == Agent(0, √2/2, √2/2)
+  end
+
+  @testset "Finding n1 and n2 at various intersections" begin
+    @testset "Test #1" begin
+      a = GlassSphere()
+      a.transform = scaling(2, 2, 2)
+      a.material.refractive_index = 1.5
+      b = GlassSphere()
+      b.transform = translation(0, 0, -0.25)
+      b.material.refractive_index = 2.0
+      c = GlassSphere()
+      c.transform = translation(0, 0, 0.25)
+      c.material.refractive_index = 2.5
+      r = Ray(Point(0, 0, -4), Agent(0, 0, 1))
+      xs = intersections(Intersection(a, 2), Intersection(b, 2.75),
+                         Intersection(c, 3.25), Intersection(b, 4.75),
+                         Intersection(c, 5.25), Intersection(a, 6))
+      comps = prepare_computations(xs[1], r, xs)
+      @test comps.n1 == 1.0
+      @test comps.n2 == 1.5
+    end
+
+    @testset "Test #2" begin
+      a = GlassSphere()
+      a.transform = scaling(2, 2, 2)
+      a.material.refractive_index = 1.5
+      b = GlassSphere()
+      b.transform = translation(0, 0, -0.25)
+      b.material.refractive_index = 2.0
+      c = GlassSphere()
+      c.transform = translation(0, 0, 0.25)
+      c.material.refractive_index = 2.5
+      r = Ray(Point(0, 0, -4), Agent(0, 0, 1))
+      xs = intersections(Intersection(a, 2), Intersection(b, 2.75),
+                         Intersection(c, 3.25), Intersection(b, 4.75),
+                         Intersection(c, 5.25), Intersection(a, 6))
+      comps = prepare_computations(xs[2], r, xs)
+      @test comps.n1 == 1.5
+      @test comps.n2 == 2.0
+    end
+
+    @testset "Test #3" begin
+      a = GlassSphere()
+      a.transform = scaling(2, 2, 2)
+      a.material.refractive_index = 1.5
+      b = GlassSphere()
+      b.transform = translation(0, 0, -0.25)
+      b.material.refractive_index = 2.0
+      c = GlassSphere()
+      c.transform = translation(0, 0, 0.25)
+      c.material.refractive_index = 2.5
+      r = Ray(Point(0, 0, -4), Agent(0, 0, 1))
+      xs = intersections(Intersection(a, 2), Intersection(b, 2.75),
+                         Intersection(c, 3.25), Intersection(b, 4.75),
+                         Intersection(c, 5.25), Intersection(a, 6))
+      comps = prepare_computations(xs[3], r, xs)
+      @test comps.n1 == 2.0
+      @test comps.n2 == 2.5
+    end
+
+    @testset "Test #4" begin
+      a = GlassSphere()
+      a.transform = scaling(2, 2, 2)
+      a.material.refractive_index = 1.5
+      b = GlassSphere()
+      b.transform = translation(0, 0, -0.25)
+      b.material.refractive_index = 2.0
+      c = GlassSphere()
+      c.transform = translation(0, 0, 0.25)
+      c.material.refractive_index = 2.5
+      r = Ray(Point(0, 0, -4), Agent(0, 0, 1))
+      xs = intersections(Intersection(a, 2), Intersection(b, 2.75),
+                         Intersection(c, 3.25), Intersection(b, 4.75),
+                         Intersection(c, 5.25), Intersection(a, 6))
+      comps = prepare_computations(xs[4], r, xs)
+      @test comps.n1 == 2.5
+      @test comps.n2 == 2.5
+    end
+
+    @testset "Test #5" begin
+      a = GlassSphere()
+      a.transform = scaling(2, 2, 2)
+      a.material.refractive_index = 1.5
+      b = GlassSphere()
+      b.transform = translation(0, 0, -0.25)
+      b.material.refractive_index = 2.0
+      c = GlassSphere()
+      c.transform = translation(0, 0, 0.25)
+      c.material.refractive_index = 2.5
+      r = Ray(Point(0, 0, -4), Agent(0, 0, 1))
+      xs = intersections(Intersection(a, 2), Intersection(b, 2.75),
+                         Intersection(c, 3.25), Intersection(b, 4.75),
+                         Intersection(c, 5.25), Intersection(a, 6))
+      comps = prepare_computations(xs[5], r, xs)
+      @test comps.n1 == 2.5
+      @test comps.n2 == 1.5
+    end
+
+    @testset "Test #6" begin
+      a = GlassSphere()
+      a.transform = scaling(2, 2, 2)
+      a.material.refractive_index = 1.5
+      b = GlassSphere()
+      b.transform = translation(0, 0, -0.25)
+      b.material.refractive_index = 2.0
+      c = GlassSphere()
+      c.transform = translation(0, 0, 0.25)
+      c.material.refractive_index = 2.5
+      r = Ray(Point(0, 0, -4), Agent(0, 0, 1))
+      xs = intersections(Intersection(a, 2), Intersection(b, 2.75),
+                         Intersection(c, 3.25), Intersection(b, 4.75),
+                         Intersection(c, 5.25), Intersection(a, 6))
+      comps = prepare_computations(xs[6], r, xs)
+      @test comps.n1 == 1.5
+      @test comps.n2 == 1.0
+    end
+  end
+
+  @testset "The under point is offset below the surface" begin
+    r = Ray(Point(0, 0, -5), Agent(0, 0, 1))
+    shape = GlassSphere()
+    shape.transform = translation(0, 0, 1)
+    i = Intersection(shape, 5)
+    xs = intersections(i)
+    comps = prepare_computations(i, r, xs)
+    @test comps.under_point.z > epsilon/2
+    @test comps.point.z < comps.under_point.z
+  end
+
+  @testset "Schlick approximation" begin
+    @testset "under total internal reflection" begin
+      shape = GlassSphere()
+      r = Ray(Point(0, 0, √2/2), Agent(0, 1, 0))
+      xs = intersections(Intersection(shape, -√2/2), Intersection(shape, √2/2))
+      comps = prepare_computations(xs[2], r, xs)
+      reflectance = schlick(comps)
+      @test reflectance == 1.0
+    end
+
+    @testset "with a perpendicular viewing angle" begin
+      shape = GlassSphere()
+      r = Ray(Point(0, 0, 0), Agent(0, 1, 0))
+      xs = intersections(Intersection(shape, -1), Intersection(shape, 1))
+      comps = prepare_computations(xs[2], r, xs)
+      reflectance = schlick(comps)
+      @test isapprox(reflectance, 0.04, atol=epsilon)
+    end
+
+    @testset "with small angle and n2 > n1" begin
+      shape = GlassSphere()
+      r = Ray(Point(0, 0.99, -2), Agent(0, 0, 1))
+      xs = intersections(Intersection(shape, 1.8589))
+      comps = prepare_computations(xs[1], r, xs)
+      reflectance = schlick(comps)
+      @test isapprox(reflectance, 0.48873, atol=epsilon)
+    end
   end
 
 end

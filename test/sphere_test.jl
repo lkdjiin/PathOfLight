@@ -14,4 +14,11 @@
     @test xs.i2.object == s
   end
 
+  @testset "helper for producing a sphere with a glassy material" begin
+    s = GlassSphere()
+    @test s.transform == identity4
+    @test s.material.transparency == 1.0
+    @test s.material.refractive_index == 1.5
+  end
+
 end

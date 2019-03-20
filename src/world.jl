@@ -19,9 +19,14 @@ function default_world()
   World([s1, s2], [light])
 end
 
-function intersect_world(w::World, r::Ray)::Tuple
+# seeking_shadows: If set to true, objects that aren't allowed to cast a
+#   shadow will be ignored. It's false by default.
+function intersect_world(w::World, r::Ray; seeking_shadows=false)::Tuple
   result = []
   for obj in w.objects
+    if obj.shadow == :off && seeking_shadows
+      continue
+    end
     inters = intersects(obj, r)
     for i in inters
       push!(result, i)
@@ -63,7 +68,7 @@ function isshadowed(w::World, p::Element)::Bool
   v = first(w.lights).position - p
   distance = magnitude(v)
   r = Ray(p, normalize(v))
-  inters = intersect_world(w, r)
+  inters = intersect_world(w, r, seeking_shadows=true)
   h = hit(inters)
   if h != nothing && h.t < distance
     true

@@ -11,3 +11,19 @@ function normal_at(p::Plane, world_point::Element)
   world_normal = permutedims(inv(p.transform)) * local_normal
   normalize(Agent(world_normal))
 end
+
+function normal_at(c::Cube, world_point::Element)
+  local_point = inv(c.transform) * world_point
+
+  maxc = max(abs(local_point.x), abs(local_point.y), abs(local_point.z))
+  if maxc == abs(local_point.x)
+    local_normal = Agent(local_point.x, 0, 0)
+  elseif maxc == abs(local_point.y)
+    local_normal = Agent(0, local_point.y, 0)
+  else
+    local_normal = Agent(0, 0, local_point.z)
+  end
+
+  world_normal = permutedims(inv(c.transform)) * local_normal
+  normalize(Agent(world_normal))
+end

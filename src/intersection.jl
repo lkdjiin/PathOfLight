@@ -29,6 +29,21 @@ function intersects(sphere::Sphere, ray::Ray)
   return (i1=i1, i2=i2)
 end
 
+function intersects(cube::Cube, ray::Ray)
+  object_space_ray = transform(ray, inv(cube.transform))
+  xtmin, xtmax = IntersectionH.check_axis(object_space_ray.origin.x, object_space_ray.direction.x)
+  ytmin, ytmax = IntersectionH.check_axis(object_space_ray.origin.y, object_space_ray.direction.y)
+  ztmin, ztmax = IntersectionH.check_axis(object_space_ray.origin.z, object_space_ray.direction.z)
+  tmin = max(xtmin, ytmin, ztmin)
+  tmax = min(xtmax, ytmax, ztmax)
+
+  if tmin > tmax
+    return ()
+  end
+
+  (i1=Intersection(cube, tmin), i2=Intersection(cube, tmax))
+end
+
 function intersects(plane::Plane, ray::Ray)
   object_space_ray = transform(ray, inv(plane.transform))
 
@@ -166,5 +181,19 @@ module IntersectionH
     end
 
     (n1, n2)
+  end
+
+  function check_axis(origin, direction)
+    tmin_numerator = (-1 - origin)
+    tmax_numerator = (1 - origin)
+
+    tmin = tmin_numerator / direction
+    tmax = tmax_numerator / direction
+
+    if tmin > tmax
+      tmin, tmax = tmax, tmin
+    end
+
+    return tmin, tmax
   end
 end

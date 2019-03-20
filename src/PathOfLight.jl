@@ -35,6 +35,7 @@ export Sphere
 include("sphere.jl")
 export Plane
 include("plane.jl")
+include("cube.jl")
 
 export Intersection, intersects, intersections, hit, prepare_computations
 include("intersection.jl")

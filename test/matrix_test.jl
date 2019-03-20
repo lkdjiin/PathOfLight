@@ -153,17 +153,24 @@
         p = Point(0, 1, 0)
         full_quarter = rotation_x(π / 2)
         @test full_quarter * p == Point(0, 0, 1)
+        full_quarter = rotationd_x(90)
+        @test full_quarter * p == Point(0, 0, 1)
       end
 
       @testset "by half a quarter" begin
         p = Point(0, 1, 0)
         half_quarter = rotation_x(π / 4)
         @test half_quarter * p == Point(0, √2 / 2, √2 / 2)
+        half_quarter = rotationd_x(45)
+        @test half_quarter * p == Point(0, √2 / 2, √2 / 2)
       end
 
       @testset "The inverse rotates in the opposite direction" begin
         p = Point(0, 1, 0)
         half_quarter = rotation_x(π / 4)
+        inversed = inv(half_quarter)
+        @test inversed * p == Point(0, √2 / 2, -√2 / 2)
+        half_quarter = rotationd_x(45)
         inversed = inv(half_quarter)
         @test inversed * p == Point(0, √2 / 2, -√2 / 2)
       end
@@ -176,6 +183,10 @@
         full_quarter = rotation_y(π / 2)
         @test half_quarter * p == Point(√2/2, 0, √2/2)
         @test full_quarter * p == Point(1, 0, 0)
+        half_quarter = rotationd_y(45)
+        full_quarter = rotationd_y(90)
+        @test half_quarter * p == Point(√2/2, 0, √2/2)
+        @test full_quarter * p == Point(1, 0, 0)
       end
     end
 
@@ -184,6 +195,10 @@
         p = Point(0, 1, 0)
         half_quarter = rotation_z(π / 4)
         full_quarter = rotation_z(π / 2)
+        @test half_quarter * p == Point(-√2/2, √2/2, 0)
+        @test full_quarter * p == Point(-1, 0, 0)
+        half_quarter = rotationd_z(45)
+        full_quarter = rotationd_z(90)
         @test half_quarter * p == Point(-√2/2, √2/2, 0)
         @test full_quarter * p == Point(-1, 0, 0)
       end

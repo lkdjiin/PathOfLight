@@ -55,6 +55,15 @@ function rotation_x(radians)
   result
 end
 
+function rotationd_x(degrees)
+  result = copy(identity4)
+  result[2, 2] = cosd(degrees)
+  result[3, 3] = cosd(degrees)
+  result[2, 3] = -sind(degrees)
+  result[3, 2] = sind(degrees)
+  result
+end
+
 function rotation_y(radians)
   result = copy(identity4)
   result[1, 1] = cos(radians)
@@ -64,12 +73,30 @@ function rotation_y(radians)
   result
 end
 
+function rotationd_y(degrees)
+  result = copy(identity4)
+  result[1, 1] = cosd(degrees)
+  result[3, 3] = cosd(degrees)
+  result[1, 3] = sind(degrees)
+  result[3, 1] = -sind(degrees)
+  result
+end
+
 function rotation_z(radians)
   result = copy(identity4)
   result[1, 1] = cos(radians)
   result[2, 2] = cos(radians)
   result[1, 2] = -sin(radians)
   result[2, 1] = sin(radians)
+  result
+end
+
+function rotationd_z(degrees)
+  result = copy(identity4)
+  result[1, 1] = cosd(degrees)
+  result[2, 2] = cosd(degrees)
+  result[1, 2] = -sind(degrees)
+  result[2, 1] = sind(degrees)
   result
 end
 

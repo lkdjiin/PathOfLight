@@ -8,6 +8,8 @@ const black = Color(0, 0, 0)
 const white = Color(1, 1, 1)
 const red = Color(1, 0, 0)
 const blue = Color(0, 0, 1)
+const green = Color(0, 1, 0)
+const yellow = Color(1, 1, 0)
 
 # Sometimes it's easier (or makes sens) to construct a Color from a
 # red/green/blue tuple.

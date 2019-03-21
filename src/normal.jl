@@ -5,6 +5,13 @@ function normal_at(s::Sphere, world_point::Element)
   normalize(Agent(world_normal))
 end
 
+function normal_at(c::Cylinder, world_point::Element)
+  local_point = inv(c.transform) * world_point
+  local_normal = Agent(local_point.x, 0, local_point.z)
+  world_normal = permutedims(inv(c.transform)) * local_normal
+  normalize(Agent(world_normal))
+end
+
 function normal_at(p::Plane, world_point::Element)
   local_point = inv(p.transform) * world_point
   local_normal = Agent(0, 1, 0)

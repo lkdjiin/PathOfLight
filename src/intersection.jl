@@ -29,11 +29,40 @@ function intersects(sphere::Sphere, ray::Ray)
   return (i1=i1, i2=i2)
 end
 
+function intersects(cylinder::Cylinder, ray::Ray)
+  # Convert world space ray to object space ray
+  osr = transform(ray, inv(cylinder.transform))
+
+  a = osr.direction.x^2 + osr.direction.z^2
+
+  # ray is parallel to the y axis
+  if isapprox(0, a, atol=epsilon)
+    return ()
+  end
+
+  b = 2 * osr.origin.x * osr.direction.x + 2 * osr.origin.z * osr.direction.z
+  c = osr.origin.x^2 + osr.origin.z^2 - 1
+  discr = b^2 - 4 * a * c
+
+  # ray does not intersect the cylinder
+  if discr < 0
+    return ()
+  end
+
+  t1 = (-b - √(discr)) / (2 * a)
+  t2 = (-b + √(discr)) / (2 * a)
+
+  (i1=Intersection(cylinder, t1), i2=Intersection(cylinder, t2))
+end
+
 function intersects(cube::Cube, ray::Ray)
   object_space_ray = transform(ray, inv(cube.transform))
-  xtmin, xtmax = IntersectionH.check_axis(object_space_ray.origin.x, object_space_ray.direction.x)
-  ytmin, ytmax = IntersectionH.check_axis(object_space_ray.origin.y, object_space_ray.direction.y)
-  ztmin, ztmax = IntersectionH.check_axis(object_space_ray.origin.z, object_space_ray.direction.z)
+  xtmin, xtmax = IntersectionH.check_axis(object_space_ray.origin.x,
+                                          object_space_ray.direction.x)
+  ytmin, ytmax = IntersectionH.check_axis(object_space_ray.origin.y,
+                                          object_space_ray.direction.y)
+  ztmin, ztmax = IntersectionH.check_axis(object_space_ray.origin.z,
+                                          object_space_ray.direction.z)
   tmin = max(xtmin, ytmin, ztmin)
   tmax = min(xtmax, ytmax, ztmax)
 

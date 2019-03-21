@@ -52,7 +52,28 @@ function intersects(cylinder::Cylinder, ray::Ray)
   t1 = (-b - √(discr)) / (2 * a)
   t2 = (-b + √(discr)) / (2 * a)
 
-  (i1=Intersection(cylinder, t1), i2=Intersection(cylinder, t2))
+  # XXX Why are we doing that?
+  if t1 > t2
+    t1, t2 = t2, t1
+  end
+
+  xs = []
+  y1 = osr.origin.y + t1 * osr.direction.y
+  if cylinder.minimum < y1 < cylinder.maximum
+    push!(xs, Intersection(cylinder, t1))
+  end
+  y2 = osr.origin.y + t2 * osr.direction.y
+  if cylinder.minimum < y2 < cylinder.maximum
+    push!(xs, Intersection(cylinder, t2))
+  end
+
+  if length(xs) == 2
+    return (i1=xs[1], i2=xs[2])
+  elseif length(xs) == 1
+    return (i1=xs[1],)
+  else
+    return ()
+  end
 end
 
 function intersects(cube::Cube, ray::Ray)

@@ -44,4 +44,40 @@
     @test n == Agent(-1, 0, 0)
   end
 
+  @testset "The default minimum and maximum for a cylinder" begin
+    c = Cylinder()
+    @test c.minimum == -Inf
+    @test c.maximum == Inf
+  end
+
+  @testset "Intersecting a constrained cylinder" begin
+    cyl = Cylinder()
+    cyl.minimum = 1
+    cyl.maximum = 2
+
+    r = Ray(Point(0, 1.5, 0), normalize(Agent(0.1, 1, 0)))
+    xs = intersects(cyl, r)
+    @test length(xs) == 0
+
+    r = Ray(Point(0, 3, -5), normalize(Agent(0, 0, 1)))
+    xs = intersects(cyl, r)
+    @test length(xs) == 0
+
+    r = Ray(Point(0, 0, -5), normalize(Agent(0, 0, 1)))
+    xs = intersects(cyl, r)
+    @test length(xs) == 0
+
+    r = Ray(Point(0, 2, -5), normalize(Agent(0, 0, 1)))
+    xs = intersects(cyl, r)
+    @test length(xs) == 0
+
+    r = Ray(Point(0, 1, -5), normalize(Agent(0, 0, 1)))
+    xs = intersects(cyl, r)
+    @test length(xs) == 0
+
+    r = Ray(Point(0, 1.5, -2), normalize(Agent(0, 0, 1)))
+    xs = intersects(cyl, r)
+    @test length(xs) == 2
+  end
+
 end

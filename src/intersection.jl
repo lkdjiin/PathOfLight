@@ -30,42 +30,43 @@ function intersects(sphere::Sphere, ray::Ray)
 end
 
 function intersects(cylinder::Cylinder, ray::Ray)
+  xs = []
+
   # Convert world space ray to object space ray
   osr = transform(ray, inv(cylinder.transform))
 
   a = osr.direction.x^2 + osr.direction.z^2
 
   # ray is parallel to the y axis
-  if isapprox(0, a, atol=epsilon)
-    return ()
+  if !isapprox(0, a, atol=epsilon)
+    b = 2 * osr.origin.x * osr.direction.x + 2 * osr.origin.z * osr.direction.z
+    c = osr.origin.x^2 + osr.origin.z^2 - 1
+    discr = b^2 - 4 * a * c
+
+    # ray does not intersect the cylinder
+    if discr < 0
+      return ()
+    end
+
+    t1 = (-b - √(discr)) / (2 * a)
+    t2 = (-b + √(discr)) / (2 * a)
+
+    # XXX Why are we doing that?
+    if t1 > t2
+      t1, t2 = t2, t1
+    end
+
+    y1 = osr.origin.y + t1 * osr.direction.y
+    if cylinder.minimum < y1 < cylinder.maximum
+      push!(xs, Intersection(cylinder, t1))
+    end
+    y2 = osr.origin.y + t2 * osr.direction.y
+    if cylinder.minimum < y2 < cylinder.maximum
+      push!(xs, Intersection(cylinder, t2))
+    end
   end
 
-  b = 2 * osr.origin.x * osr.direction.x + 2 * osr.origin.z * osr.direction.z
-  c = osr.origin.x^2 + osr.origin.z^2 - 1
-  discr = b^2 - 4 * a * c
-
-  # ray does not intersect the cylinder
-  if discr < 0
-    return ()
-  end
-
-  t1 = (-b - √(discr)) / (2 * a)
-  t2 = (-b + √(discr)) / (2 * a)
-
-  # XXX Why are we doing that?
-  if t1 > t2
-    t1, t2 = t2, t1
-  end
-
-  xs = []
-  y1 = osr.origin.y + t1 * osr.direction.y
-  if cylinder.minimum < y1 < cylinder.maximum
-    push!(xs, Intersection(cylinder, t1))
-  end
-  y2 = osr.origin.y + t2 * osr.direction.y
-  if cylinder.minimum < y2 < cylinder.maximum
-    push!(xs, Intersection(cylinder, t2))
-  end
+  IntersectionH.intersect_caps!(cylinder, osr, xs)
 
   if length(xs) == 2
     return (i1=xs[1], i2=xs[2])
@@ -197,7 +198,7 @@ function schlick(comps)
 end
 
 module IntersectionH
-  using Main: Intersection
+  using Main: Intersection, Ray, Cylinder
 
   function refractive_indices(inters::Tuple, hit::Intersection)
     containers = []
@@ -246,4 +247,31 @@ module IntersectionH
 
     return tmin, tmax
   end
+
+  function check_cap(ray::Ray, t)
+    x = ray.origin.x + t * ray.direction.x
+    z = ray.origin.z + t * ray.direction.z
+    return (x^2 + z^2) <= 1
+  end
+
+  function intersect_caps!(cyl::Cylinder, ray::Ray, xs)
+    # caps only matter if the cylinder is closed, and might possibly be
+    # intersected by the ray.
+    if cyl.closed == false || isapprox(ray.direction.y, 0.0, atol=Main.epsilon)
+      return
+    end
+    # check for an intersection with the lower end cap by intersecting
+    # the ray with the plane at y=cyl.minimum
+    t = (cyl.minimum - ray.origin.y) / ray.direction.y
+    if check_cap(ray, t)
+      push!(xs, Intersection(cyl, t))
+    end
+    # check for an intersection with the upper end cap by intersecting
+    # the ray with the plane at y=cyl.maximum
+    t = (cyl.maximum - ray.origin.y) / ray.direction.y
+    if check_cap(ray, t)
+      push!(xs, Intersection(cyl, t))
+    end
+  end
+
 end

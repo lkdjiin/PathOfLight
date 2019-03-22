@@ -7,7 +7,16 @@ end
 
 function normal_at(c::Cylinder, world_point::Element)
   local_point = inv(c.transform) * world_point
-  local_normal = Agent(local_point.x, 0, local_point.z)
+
+  dist = local_point.x^2 + local_point.z^2
+  if dist < 1 && local_point.y >= c.maximum - epsilon
+    local_normal = Agent(0, 1, 0)
+  elseif dist < 1 && local_point.y <= c.minimum + epsilon
+    local_normal = Agent(0, -1, 0)
+  else
+    local_normal = Agent(local_point.x, 0, local_point.z)
+  end
+
   world_normal = permutedims(inv(c.transform)) * local_normal
   normalize(Agent(world_normal))
 end

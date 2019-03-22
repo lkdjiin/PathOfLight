@@ -80,4 +80,57 @@
     @test length(xs) == 2
   end
 
+  @testset "The default closed value for a cylinder" begin
+    c = Cylinder()
+    @test c.closed == false
+  end
+
+  @testset "Intersecting the caps of a closed cylinder" begin
+    cyl = Cylinder()
+    cyl.minimum = 1
+    cyl.maximum = 2
+    cyl.closed = true
+
+    xs = intersects(cyl, Ray(Point(0, 3, 0), normalize(Agent(0, -1, 0))))
+    @test length(xs) == 2
+
+    xs = intersects(cyl, Ray(Point(0, 3, -2), normalize(Agent(0, -1, 2))))
+    @test length(xs) == 2
+
+    xs = intersects(cyl, Ray(Point(0, 4, -2), normalize(Agent(0, -1, 1))))
+    @test length(xs) == 2
+
+    xs = intersects(cyl, Ray(Point(0, 0, -2), normalize(Agent(0, 1, 2))))
+    @test length(xs) == 2
+
+    xs = intersects(cyl, Ray(Point(0, -1, -2), normalize(Agent(0, 1, 1))))
+    @test length(xs) == 2
+  end
+
+  @testset "The normal vector on a cylinder's end caps" begin
+    cyl = Cylinder()
+    cyl.minimum = 1
+    cyl.maximum = 2
+    cyl.closed = true
+
+    n = normal_at(cyl, Point(0, 1, 0))
+    @test n == Agent(0, -1, 0)
+
+    n = normal_at(cyl, Point(0.5, 1, 0))
+    @test n == Agent(0, -1, 0)
+
+    n = normal_at(cyl, Point(0, 1, 0.5))
+    @test n == Agent(0, -1, 0)
+
+    n = normal_at(cyl, Point(0, 2, 0))
+    @test n == Agent(0, 1, 0)
+
+    n = normal_at(cyl, Point(0.5, 2, 0))
+    @test n == Agent(0, 1, 0)
+
+    n = normal_at(cyl, Point(0, 2, 0.5))
+    @test n == Agent(0, 1, 0)
+
+  end
+
 end

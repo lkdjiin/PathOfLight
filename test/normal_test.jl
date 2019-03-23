@@ -62,7 +62,6 @@
       n = normal_at(p, Point(0, 0, 0))
       @test n == Agent(0, 0, 1)
     end
-
   end
 
 end

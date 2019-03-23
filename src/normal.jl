@@ -6,7 +6,7 @@ function normal_at(s::Shape, world_point::Element)
 end
 
 module NormalH
-  using Main: Element, Agent, Point, Sphere, Cylinder, Plane, Cube
+  using Main: Element, Agent, Point, Sphere, Cylinder, Plane, Cube, Cone
 
   function normal_at(shape::Sphere, point::Element)
     point - Point(0, 0, 0)
@@ -21,6 +21,14 @@ module NormalH
     else
       Agent(point.x, 0, point.z)
     end
+  end
+
+  function normal_at(shape::Cone, point::Element)
+    y = √(point.x^2 + point.z^2)
+    if point.y > 0
+      y = -y
+    end
+    Agent(point.x, y, point.z)
   end
 
   function normal_at(shape::Plane, point::Element)

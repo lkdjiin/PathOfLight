@@ -29,6 +29,60 @@ function intersects(sphere::Sphere, ray::Ray)
   return (i1=i1, i2=i2)
 end
 
+function intersects(cone::Cone, ray::Ray)
+  xs = []
+
+  osr = transform(ray, inv(cone.transform))
+
+  a = osr.direction.x ^ 2 - osr.direction.y ^ 2 + osr.direction.z ^ 2
+  b = 2 * osr.origin.x * osr.direction.x - 2 * osr.origin.y * osr.direction.y + 2 * osr.origin.z * osr.direction.z
+  c = osr.origin.x ^ 2 - osr.origin.y ^ 2 + osr.origin.z ^ 2
+
+  if isapprox(a, 0.0, atol=epsilon) && isapprox(b, 0.0, atol=epsilon)
+    # ray miss the cone.
+  elseif isapprox(a, 0.0, atol=epsilon)
+    push!(xs, Intersection(cone, -c / 2b))
+  else
+    discr = b^2 - 4 * a * c
+    if discr < 0.0
+      # I think (as in «not sure, fucking math!») that here the ray miss
+      # the cone and can't hit a cap.
+      return ()
+    end
+
+    t1 = (-b - √(discr)) / (2 * a)
+    t2 = (-b + √(discr)) / (2 * a)
+
+    # XXX Why are we doing that?
+    if t1 > t2
+      t1, t2 = t2, t1
+    end
+
+    y1 = osr.origin.y + t1 * osr.direction.y
+    if cone.minimum < y1 < cone.maximum
+      push!(xs, Intersection(cone, t1))
+    end
+    y2 = osr.origin.y + t2 * osr.direction.y
+    if cone.minimum < y2 < cone.maximum
+      push!(xs, Intersection(cone, t2))
+    end
+  end
+
+  IntersectionH.intersect_caps!(cone, osr, xs)
+
+  if length(xs) == 0
+    ()
+  elseif length(xs) == 1
+    (i1=xs[1],)
+  elseif length(xs) == 2
+    (i1=xs[1], i2=xs[2])
+  elseif length(xs) == 3
+    (i1=xs[1], i2=xs[2], i3=xs[3])
+  elseif length(xs) == 4
+    (i1=xs[1], i2=xs[2], i3=xs[3], i4=xs[4])
+  end
+end
+
 function intersects(cylinder::Cylinder, ray::Ray)
   xs = []
 
@@ -37,7 +91,7 @@ function intersects(cylinder::Cylinder, ray::Ray)
 
   a = osr.direction.x^2 + osr.direction.z^2
 
-  # ray is parallel to the y axis
+  # ray isn't parallel to the y axis
   if !isapprox(0, a, atol=epsilon)
     b = 2 * osr.origin.x * osr.direction.x + 2 * osr.origin.z * osr.direction.z
     c = osr.origin.x^2 + osr.origin.z^2 - 1
@@ -198,7 +252,7 @@ function schlick(comps)
 end
 
 module IntersectionH
-  using Main: Intersection, Ray, Cylinder
+  using Main: Intersection, Ray, Cylinder, Cone
 
   function refractive_indices(inters::Tuple, hit::Intersection)
     containers = []
@@ -271,6 +325,28 @@ module IntersectionH
     t = (cyl.maximum - ray.origin.y) / ray.direction.y
     if check_cap(ray, t)
       push!(xs, Intersection(cyl, t))
+    end
+  end
+
+  function check_cap(ray::Ray, t, radius)
+    x = ray.origin.x + t * ray.direction.x
+    z = ray.origin.z + t * ray.direction.z
+    x^2 + z^2 < radius ^ 2
+  end
+
+  function intersect_caps!(cone::Cone, ray::Ray, xs)
+    if cone.closed == false || isapprox(ray.direction.y, 0.0, atol=Main.epsilon)
+      return
+    end
+
+    t = (cone.minimum - ray.origin.y) / ray.direction.y
+    if check_cap(ray, t, cone.minimum)
+      push!(xs, Intersection(cone, t))
+    end
+
+    t = (cone.maximum - ray.origin.y) / ray.direction.y
+    if check_cap(ray, t, cone.maximum)
+      push!(xs, Intersection(cone, t))
     end
   end
 

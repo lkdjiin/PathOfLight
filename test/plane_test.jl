@@ -18,8 +18,8 @@
     r = Ray(Point(0, 1, 0), Agent(0, -1, 0))
     xs = intersects(p, r)
     @test length(xs) == 1
-    @test xs.i1.t == 1
-    @test xs.i1.object == p
+    @test xs[1].t == 1
+    @test xs[1].object == p
   end
 
   @testset "A ray intersecting a plane from below" begin
@@ -27,8 +27,8 @@
     r = Ray(Point(0, -1, 0), Agent(0, 1, 0))
     xs = intersects(p, r)
     @test length(xs) == 1
-    @test xs.i1.t == 1
-    @test xs.i1.object == p
+    @test xs[1].t == 1
+    @test xs[1].object == p
   end
 
 end

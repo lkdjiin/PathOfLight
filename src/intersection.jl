@@ -11,7 +11,7 @@ end
 #
 # Returns a tuple of t1 and t2, or an empty tuple if there is no
 # intersections.
-function intersects(sphere::Sphere, ray::Ray)
+function intersects(sphere::Sphere, ray::Ray)::Tuple
   object_space_ray = transform(ray, inv(sphere.transform))
 
   d = discriminant(object_space_ray)
@@ -26,10 +26,10 @@ function intersects(sphere::Sphere, ray::Ray)
   i1=Intersection(sphere, t1)
   i2=Intersection(sphere, t2)
 
-  return (i1=i1, i2=i2)
+  return (i1, i2)
 end
 
-function intersects(cone::Cone, ray::Ray)
+function intersects(cone::Cone, ray::Ray)::Tuple
   xs = []
 
   osr = transform(ray, inv(cone.transform))
@@ -70,20 +70,10 @@ function intersects(cone::Cone, ray::Ray)
 
   IntersectionH.intersect_caps!(cone, osr, xs)
 
-  if length(xs) == 0
-    ()
-  elseif length(xs) == 1
-    (i1=xs[1],)
-  elseif length(xs) == 2
-    (i1=xs[1], i2=xs[2])
-  elseif length(xs) == 3
-    (i1=xs[1], i2=xs[2], i3=xs[3])
-  elseif length(xs) == 4
-    (i1=xs[1], i2=xs[2], i3=xs[3], i4=xs[4])
-  end
+  Tuple(xs)
 end
 
-function intersects(cylinder::Cylinder, ray::Ray)
+function intersects(cylinder::Cylinder, ray::Ray)::Tuple
   xs = []
 
   # Convert world space ray to object space ray
@@ -122,16 +112,10 @@ function intersects(cylinder::Cylinder, ray::Ray)
 
   IntersectionH.intersect_caps!(cylinder, osr, xs)
 
-  if length(xs) == 2
-    return (i1=xs[1], i2=xs[2])
-  elseif length(xs) == 1
-    return (i1=xs[1],)
-  else
-    return ()
-  end
+  Tuple(xs)
 end
 
-function intersects(cube::Cube, ray::Ray)
+function intersects(cube::Cube, ray::Ray)::Tuple
   object_space_ray = transform(ray, inv(cube.transform))
   xtmin, xtmax = IntersectionH.check_axis(object_space_ray.origin.x,
                                           object_space_ray.direction.x)
@@ -146,10 +130,10 @@ function intersects(cube::Cube, ray::Ray)
     return ()
   end
 
-  (i1=Intersection(cube, tmin), i2=Intersection(cube, tmax))
+  (Intersection(cube, tmin), Intersection(cube, tmax))
 end
 
-function intersects(plane::Plane, ray::Ray)
+function intersects(plane::Plane, ray::Ray)::Tuple
   object_space_ray = transform(ray, inv(plane.transform))
 
   if abs(object_space_ray.direction.y) < epsilon
@@ -157,7 +141,7 @@ function intersects(plane::Plane, ray::Ray)
   end
 
   t = -object_space_ray.origin.y / object_space_ray.direction.y
-  (i1=Intersection(plane, t), )
+  (Intersection(plane, t), )
 end
 
 # Remember: the sphere is centered at the world origin and its radius is

@@ -10,8 +10,8 @@
     s = Sphere()
     xs = intersects(s, r)
     @test length(xs) == 2
-    @test xs.i1.object == s
-    @test xs.i2.object == s
+    @test xs[1].object == s
+    @test xs[2].object == s
   end
 
   @testset "helper for producing a sphere with a glassy material" begin

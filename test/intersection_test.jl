@@ -35,8 +35,8 @@
       s = Sphere()
       xs = intersects(s, r)
       @test length(xs) == 2
-      @test xs.i1.t == 4.0
-      @test xs.i2.t == 6.0
+      @test xs[1].t == 4.0
+      @test xs[2].t == 6.0
     end
 
     @testset "A ray intersects a sphere at a tangent" begin
@@ -44,8 +44,8 @@
       s = Sphere()
       xs = intersects(s, r)
       @test length(xs) == 2
-      @test xs.i1.t == 5.0
-      @test xs.i2.t == 5.0
+      @test xs[1].t == 5.0
+      @test xs[2].t == 5.0
     end
 
     @testset "A ray misses a sphere" begin
@@ -60,8 +60,8 @@
       s = Sphere()
       xs = intersects(s, r)
       @test length(xs) == 2
-      @test xs.i1.t == -1.0
-      @test xs.i2.t == 1.0
+      @test xs[1].t == -1.0
+      @test xs[2].t == 1.0
     end
 
     @testset "A sphere is behind a ray" begin
@@ -69,8 +69,8 @@
       s = Sphere()
       xs = intersects(s, r)
       @test length(xs) == 2
-      @test xs.i1.t == -6.0
-      @test xs.i2.t == -4.0
+      @test xs[1].t == -6.0
+      @test xs[2].t == -4.0
     end
 
     @testset "Intersecting a scaled sphere with a ray" begin
@@ -79,8 +79,8 @@
       s.transform = scaling(2, 2, 2)
       xs = intersects(s, r)
       @test length(xs) == 2
-      @test xs.i1.t == 3
-      @test xs.i2.t == 7
+      @test xs[1].t == 3
+      @test xs[2].t == 7
     end
 
     @testset "Intersecting a translated sphere with a ray" begin

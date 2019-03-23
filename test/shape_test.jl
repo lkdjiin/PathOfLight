@@ -1,10 +1,11 @@
 mutable struct TestShape <: Shape
   id::String
+  parent::Union{Shape, Nothing}
   transform
   material
   saved_ray # Only for testing purpose
 
-  TestShape() = new(string(UUIDs.uuid1()), identity4, Material())
+  TestShape() = new(string(UUIDs.uuid1()), nothing, identity4, Material())
 end
 
 function intersects(s::TestShape, ray::Ray)
@@ -61,6 +62,11 @@ end
     xs = intersects(s, r)
     @test s.saved_ray.origin == Point(-5, 0, -5)
     @test s.saved_ray.direction == Agent(0, 0, 1)
+  end
+
+  @testset "Default parent attribute" begin
+    s = TestShape()
+    @test s.parent == nothing
   end
 
 end

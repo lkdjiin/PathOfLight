@@ -2,8 +2,9 @@ mutable struct Group <: Shape
   id::String
   transform
   childs::Array{Shape}
+  parent::Union{Shape, Nothing}
 
-  Group() = new(string(UUIDs.uuid1()), identity4, [])
+  Group() = new(string(UUIDs.uuid1()), identity4, [], nothing)
 end
 
 function add_child!(g::Group, s::Shape)

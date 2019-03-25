@@ -7,12 +7,21 @@
   end
 
   @testset "Adding a child to a group" begin
-    g = Group()
-    s = TestShape()
-    add_child!(g, s)
-    @test !isempty(g.childs)
-    @test first(g.childs) == s
-    @test s.parent == g
+    @testset "as a simple shape" begin
+      g = Group()
+      s = TestShape()
+      add_child!(g, s)
+      @test first(g.childs) == s
+      @test s.parent == g
+    end
+
+    @testset "as a group itself" begin
+      g = Group()
+      g2 = Group()
+      add_child!(g, g2)
+      @test first(g.childs) == g2
+      @test g2.parent == g
+    end
   end
 
   @testset "Intersecting a ray with an empty group" begin

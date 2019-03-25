@@ -144,6 +144,16 @@ function intersects(plane::Plane, ray::Ray)::Tuple
   (Intersection(plane, t), )
 end
 
+function intersects(group::Group, ray::Ray)::Tuple
+  xs = []
+  for e in group.childs
+    inters = intersects(e, ray)
+    xs = vcat(xs, [x for x=inters])
+  end
+  xs = sort(xs, by=x -> x.t)
+  Tuple(xs)
+end
+
 # Remember: the sphere is centered at the world origin and its radius is
 # always 1.
 function discriminant(ray)

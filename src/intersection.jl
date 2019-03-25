@@ -145,9 +145,11 @@ function intersects(plane::Plane, ray::Ray)::Tuple
 end
 
 function intersects(group::Group, ray::Ray)::Tuple
+  object_space_ray = transform(ray, inv(group.transform))
+
   xs = []
   for e in group.childs
-    inters = intersects(e, ray)
+    inters = intersects(e, object_space_ray)
     xs = vcat(xs, [x for x=inters])
   end
   xs = sort(xs, by=x -> x.t)

@@ -41,4 +41,15 @@
     @test xs[4].object.id == s1.id
   end
 
+  @testset "Intersecting a transformed group" begin
+    g = Group()
+    g.transform = scaling(2, 2, 2)
+    s = Sphere()
+    s.transform = translation(5, 0, 0)
+    add_child!(g, s)
+    r = Ray(Point(10, 0, -10), Agent(0, 0, 1))
+    xs = intersects(g, r)
+    @test length(xs) == 2
+  end
+
 end

@@ -1,16 +1,8 @@
-mutable struct TestShape <: Shape
-  id::String
-  parent::Union{Shape, Nothing}
-  transform
-  material
-  saved_ray # Only for testing purpose
-
-  TestShape() = new(string(UUIDs.uuid1()), nothing, identity4, Material())
-end
+# A shape for testing purpose.
+@shape TestShape
 
 function intersects(s::TestShape, ray::Ray)
-  object_space_ray = transform(ray, inv(s.transform))
-  s.saved_ray = object_space_ray
+  transform(ray, inv(s.transform))
 end
 
 @testset "Shape Tests" begin
@@ -50,18 +42,18 @@ end
     r = Ray(Point(0, 0, -5), Agent(0, 0, 1))
     s = TestShape()
     s.transform = scaling(2, 2, 2)
-    xs = intersects(s, r)
-    @test s.saved_ray.origin == Point(0, 0, -2.5)
-    @test s.saved_ray.direction == Agent(0, 0, 0.5)
+    object_space_ray = intersects(s, r)
+    @test object_space_ray.origin == Point(0, 0, -2.5)
+    @test object_space_ray.direction == Agent(0, 0, 0.5)
   end
 
   @testset "Intersecting a translated shape with a ray" begin
     r = Ray(Point(0, 0, -5), Agent(0, 0, 1))
     s = TestShape()
     s.transform = translation(5, 0, 0)
-    xs = intersects(s, r)
-    @test s.saved_ray.origin == Point(-5, 0, -5)
-    @test s.saved_ray.direction == Agent(0, 0, 1)
+    object_space_ray = intersects(s, r)
+    @test object_space_ray.origin == Point(-5, 0, -5)
+    @test object_space_ray.direction == Agent(0, 0, 1)
   end
 
   @testset "Default parent attribute" begin

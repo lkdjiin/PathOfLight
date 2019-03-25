@@ -19,6 +19,7 @@ macro shape(name)
       minimum
       maximum
       closed::Bool
+      parent::Union{Shape, Nothing}
 
       $name() = new(string(UUIDs.uuid1()),
                     identity4,
@@ -26,7 +27,8 @@ macro shape(name)
                     :on,
                     -Inf,
                     Inf,
-                    false)
+                    false,
+                    nothing)
     end
   end
 end

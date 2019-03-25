@@ -6,4 +6,13 @@
     @test isempty(g.childs)
   end
 
+  @testset "Adding a child to a group" begin
+    g = Group()
+    s = TestShape()
+    add_child!(g, s)
+    @test !isempty(g.childs)
+    @test first(g.childs) == s
+    @test s.parent == g
+  end
+
 end

@@ -32,3 +32,6 @@ macro shape(name)
     end
   end
 end
+
+# A shape for testing purpose.
+@shape TestShape

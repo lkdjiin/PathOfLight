@@ -1,5 +1,3 @@
-# A shape for testing purpose.
-@shape TestShape
 
 function intersects(s::TestShape, ray::Ray)
   transform(ray, inv(s.transform))

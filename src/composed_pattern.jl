@@ -30,7 +30,7 @@ end
 # Main entry to call a ComposedPattern.
 function pattern_at(pattern::ComposedPattern, object::Shape,
                     world_point::Element)::Color
-  object_point = inv(object.transform) * world_point
+  object_point = world_to_object(object, world_point)
   pattern_point = inv(pattern.transform) * object_point
   ComposedPatternH.pattern_at(pattern, pattern_point, object_point)
 end

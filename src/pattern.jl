@@ -49,7 +49,7 @@ end
 # Main entry to call a simple Pattern.
 function pattern_at(pattern::Pattern, object::Shape,
                     world_point::Element)::Color
-  object_point = inv(object.transform) * world_point
+  object_point = world_to_object(object, world_point)
   pattern_point = inv(pattern.transform) * object_point
   PatternH.pattern_at(pattern, pattern_point)
 end

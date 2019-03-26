@@ -1,8 +1,7 @@
 function normal_at(s::Shape, world_point::Element)
-  local_point = inv(s.transform) * world_point
+  local_point = world_to_object(s, world_point)
   local_normal = NormalH.normal_at(s, local_point)
-  world_normal = permutedims(inv(s.transform)) * local_normal
-  normalize(Agent(world_normal))
+  normal_to_world(s, local_normal)
 end
 
 module NormalH

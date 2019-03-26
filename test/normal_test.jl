@@ -64,4 +64,9 @@
     end
   end
 
+  @testset "on a group" begin
+    g = Group()
+    @test_throws MethodError NormalH.normal_at(g, Point(0, 0, 0))
+  end
+
 end

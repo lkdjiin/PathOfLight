@@ -35,3 +35,23 @@ end
 
 # A shape for testing purpose.
 @shape TestShape
+
+# Transform a point in world space coordinate into a point in object
+# space coordinate.
+function world_to_object(shape::Shape, point::Element)::Element
+  if shape.parent isa Shape
+    point = world_to_object(shape.parent, point)
+  end
+  return inv(shape.transform) * point
+end
+
+# Transform a normal into world space coordinate.
+function normal_to_world(shape::Shape, normal::Element)::Element
+  normal = Array(transpose(inv(shape.transform))) * normal
+  normal = Agent(normal)
+  normal = normalize(normal)
+  if shape.parent != nothing
+    normal = normal_to_world(shape.parent, normal)
+  end
+  return normal
+end

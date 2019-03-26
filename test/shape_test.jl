@@ -59,4 +59,43 @@ end
     @test s.parent == nothing
   end
 
+  @testset "Converting a point from world to object space" begin
+    g1 = Group()
+    g1.transform = rotation_y(π/2)
+    g2 = Group()
+    g2.transform = scaling(2, 2, 2)
+    add_child!(g1, g2)
+    s = Sphere()
+    s.transform = translation(5, 0, 0)
+    add_child!(g2, s)
+    p = world_to_object(s, Point(-2, 0, -10))
+    @test p == Point(0, 0, -1)
+  end
+
+  @testset "Converting a normal from object to world space" begin
+    g1 = Group()
+    g1.transform = rotation_y(π/2)
+    g2 = Group()
+    g2.transform = scaling(1, 2, 3)
+    add_child!(g1, g2)
+    s = Sphere()
+    s.transform = translation(5, 0, 0)
+    add_child!(g2, s)
+    n = normal_to_world(s, Agent(√3/3, √3/3, √3/3))
+    @test n == Agent(0.28571, 0.42857, -0.85714)
+  end
+
+  @testset "Finding the normal on a child object" begin
+    g1 = Group()
+    g1.transform = rotation_y(π/2)
+    g2 = Group()
+    g2.transform = scaling(1, 2, 3)
+    add_child!(g1, g2)
+    s = Sphere()
+    s.transform = translation(5, 0, 0)
+    add_child!(g2, s)
+    n = normal_at(s, Point(1.7321, 1.1547, -5.5774))
+    @test n == Agent(0.2857, 0.42854, -0.85716)
+  end
+
 end
